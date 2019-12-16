@@ -36,6 +36,7 @@ public class Proxy : MonoBehaviour
         //var z = proxy.transform.localPosition.x;
 
         Vector3 pos = parent.InverseTransformPoint(transform.position);
-        original.transform.localScale = pos;
+
+        original.transform.localScale = pos*2.0f;
     }
 }
