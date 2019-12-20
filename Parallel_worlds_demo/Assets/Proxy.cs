@@ -13,37 +13,15 @@ public class Proxy : MonoBehaviour
 
     void Start()
     {
-        
         grabbable = GetComponent<OVRGrabbable>();
 
         GetComponent<MeshRenderer>().material = original.GetComponent<MeshRenderer>().material;
         GetComponent<MeshFilter>().mesh = original.GetComponent<MeshFilter>().mesh;
-        //var cubeRenderer = proxy.GetComponent<Renderer>();
 
         parent = transform.parent;
 
         transform.localPosition = original.transform.localScale;
 
-
-        //instead, maybe have a list of objects in another class and as you go through that list of objects, you create a proxy in the given axis object with the right parts for each object. 
-        //later change this to just having the selector change the items in that list
-
-        /*
-
-
-        */
-
-        /*
-        grabbable = GetComponent<OVRGrabbable>();
-
-        GetComponent<MeshRenderer>().material = original.GetComponent<MeshRenderer>().material;
-        GetComponent<MeshFilter>().mesh = original.GetComponent<MeshFilter>().mesh;
-        //var cubeRenderer = proxy.GetComponent<Renderer>();
-
-        parent = transform.parent;
-        //initialize the point to the position that matches up with where the item is in space
-        transform.localPosition = parent.InverseTransformPoint(original.transform.position);
-        */
     }
     public void SetGlobalScale(Vector3 globalScale)
     {
@@ -56,17 +34,12 @@ public class Proxy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Get the Renderer component from the new cube
-
+        //0.2 is hardcoded so that the representations aren't too big
         SetGlobalScale(original.transform.localScale * 0.2f);
 
         Vector3 pos = parent.InverseTransformPoint(transform.position);
 
         original.transform.localScale = pos;
-        
-        //transform.localPosition = parent.InverseTransformPoint(original.transform.position);
 
-        //InverseTransformPoint takes it from world space to local space
-        //original.transform.localPosition = parent.InverseTransformPoint(transform.localPosition);
     }
 }
