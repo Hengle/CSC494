@@ -7,15 +7,20 @@ public class PlayerController : MonoBehaviour
 {
     // Singleton
     public static PlayerController _instance;
-    public static PlayerController instance { get => _instance == null ? FindObjectOfType<PlayerController>() : _instance; }
+    public static PlayerController instance { get => _instance ?? FindObjectOfType<PlayerController>(); }
 
     public HandController leftHand, rightHand;
 
     public float3 position { get => transform.position; set => transform.position = value; }
     public float3 scale { get => transform.localScale; set => transform.localScale = value; }
 
-    public void Awake()
+    void Awake()
     {
         _instance = this;
+    }
+
+    void Start()
+    {
+        DesignSpaceManager manager = DesignSpaceManager.instance;
     }
 }

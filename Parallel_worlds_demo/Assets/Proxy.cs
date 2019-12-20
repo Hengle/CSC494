@@ -7,7 +7,6 @@ public class Proxy : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject original; // Fish
-    public Transform follow;
 
     OVRGrabbable grabbable;
     Transform parent;
