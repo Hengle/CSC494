@@ -46,6 +46,7 @@ public class Proxy : MonoBehaviour
 
         //The issue is that the bounding box is overriding the true scale of the object! The coordinates lost information by switching to the bounding box. You should manipulate it based on the bounding box size
         original.transform.localScale = pos;
+        //use the bounding box size to scale the object?...
 
     }
 }

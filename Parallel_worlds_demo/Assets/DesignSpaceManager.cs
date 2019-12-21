@@ -10,7 +10,13 @@ public class DesignSpaceManager : MonoBehaviour
     
     public static DesignSpaceManager instance { get => _instance ?? FindObjectOfType<DesignSpaceManager>(); }
     static DesignSpaceManager _instance;
+
     public GameObject proxyPrefab;
+    public GameObject designSpace;
+
+    //static List<GameObject> _gameObjectList;
+    static List<DesignSpace> _DesignSpaceList;
+    static int main_index;
 
     /*
      * This class has the master list of design spaces
@@ -23,34 +29,16 @@ public class DesignSpaceManager : MonoBehaviour
      * 
      * 
     */
-    public GameObject designSpace;
-
-    static List<GameObject> _gameObjectList;
-
+    public DesignSpace getMainDesignSpace() {
+        return _DesignSpaceList[main_index];
+    }
     private void Awake()
     {
         _instance = this;
-        _gameObjectList = new List<GameObject>();
+        _DesignSpaceList = new List<DesignSpace>();
+        main_index = 0;
+        _DesignSpaceList.Add(new DesignSpace("Scale x", "Scale y", "Scale z", designSpace, new List<GameObject>(), proxyPrefab));
     }
-
-    public void SelectObject(GameObject selection)
-    {
-        if(_gameObjectList.Contains(selection) == false){
-            //Add the selected item into the list if it's not already in it
-            _gameObjectList.Add(selection);
-            AddToDesignSpace(selection);
-        }
-
-    }
-
-    //creates the proxy for the object in the design space
-    public void AddToDesignSpace(GameObject selection)
-    {
-        GameObject proxySphere = Instantiate(proxyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        proxySphere.transform.parent = designSpace.transform;
-        proxySphere.GetComponent<Proxy>().original = selection;
-    }
-
 
     // Start is called before the first frame update
     void Start()
