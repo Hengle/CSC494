@@ -20,7 +20,12 @@ public class Proxy : MonoBehaviour
 
         parent = transform.parent;
 
-        transform.localPosition = original.transform.localScale;
+        //Change this to use the bounding box instead of the local scale!!! Not sure how to get a rotation-invariant bounding box though
+        //transform.localPosition = original.transform.localScale;
+        transform.localPosition = original.GetComponent<MeshRenderer>().bounds.size;
+        transform.localScale = original.transform.localScale;
+        transform.localRotation = original.transform.localRotation;
+        print(original.transform.localScale);
 
     }
     public void SetGlobalScale(Vector3 globalScale)
@@ -39,6 +44,7 @@ public class Proxy : MonoBehaviour
 
         Vector3 pos = parent.InverseTransformPoint(transform.position);
 
+        //The issue is that the bounding box is overriding the true scale of the object! The coordinates lost information by switching to the bounding box. You should manipulate it based on the bounding box size
         original.transform.localScale = pos;
 
     }
