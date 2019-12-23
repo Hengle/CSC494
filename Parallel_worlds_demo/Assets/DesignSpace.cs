@@ -55,7 +55,7 @@ public class DesignSpace
     {
         GameObject proxySphere = GameObject.Instantiate(proxyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         proxySphere.GetComponent<Proxy>().original = selection;
-        proxySphere.transform.parent = selection.transform;
+        proxySphere.transform.parent = this.axis.transform;
     }
 
 }
