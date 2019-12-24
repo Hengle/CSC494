@@ -4624,6 +4624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99e813c4a2696d341a7ef59f5235c9f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: 1
   proxyPrefab: {fileID: 3297945295539351213, guid: ca4fc86ea7a06b74b98979b09bee45a6,
     type: 3}
   designSpace: {fileID: 803619886}
@@ -16588,6 +16589,7 @@ GameObject:
   - component: {fileID: 1406982316}
   - component: {fileID: 1406982315}
   - component: {fileID: 1406982314}
+  - component: {fileID: 1406982319}
   m_Layer: 0
   m_Name: Fish_010
   m_TagString: Untagged
@@ -16701,6 +16703,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406982312}
   m_Mesh: {fileID: 4300064, guid: e8614f2c73c299f48ac4f9e1f095c8ca, type: 3}
+--- !u!114 &1406982319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406982312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 4.76
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1421914620
 GameObject:
   m_ObjectHideFlags: 0

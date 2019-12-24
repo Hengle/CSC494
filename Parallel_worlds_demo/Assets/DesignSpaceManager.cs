@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class DesignSpaceManager : MonoBehaviour
 {
-    
+    public OVRInput.Controller controller;
     public static DesignSpaceManager instance { get => _instance ?? FindObjectOfType<DesignSpaceManager>(); }
     static DesignSpaceManager _instance;
 
@@ -49,6 +49,11 @@ public class DesignSpaceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (OVRInput.GetDown(OVRInput.Button.One, controller))
+        {
+            //Create a new default design space (position)
+
+        }
+
     }
 }

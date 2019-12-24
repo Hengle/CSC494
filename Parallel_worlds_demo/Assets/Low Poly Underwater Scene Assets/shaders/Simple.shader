@@ -6,6 +6,8 @@
 		_Color ("Tint", Color) = (1,1,1,1)
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
+		_Offset ("Offset", Range(0, 5)) = 0.0
+		_Scale("Scale", Range(0, 1)) = 1.0
 	}
 	SubShader
 	{
@@ -23,9 +25,12 @@
 
 		sampler2D _MainTex;
 		fixed4 _Color;
+		half _Offset;
+		half _Scale;
+
 		void vert (inout appdata_full v)
 		{
-			v.color = tex2Dlod(_MainTex, v.texcoord) * _Color;
+			v.color = tex2Dlod(_MainTex, _Scale * v.texcoord + _Offset) * _Color;
         }
 
 		half _Glossiness;
