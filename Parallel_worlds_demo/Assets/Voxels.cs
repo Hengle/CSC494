@@ -1,8 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class Voxels : MonoBehaviour
 {
+    public Voxelizable original;
+
+    public Material fadeMaterial;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,21 +36,13 @@ public class Voxels : MonoBehaviour
             float glossiness = material.GetFloat("_Glossiness");
             float metallic = material.GetFloat("_Metallic");
 
-            //Remove the current material
-            Destroy(renderer.GetComponent<Material>());
-
-            print(color*255.0f);
-
-            //Set the colour of the material
-            Material newMaterial = new Material(shader);
+            //Set the colour of the material -- use the fade material so that you can lerp the alpha when you make the cubes fly towards you
+            Material newMaterial = new Material(fadeMaterial);
             newMaterial.color = color;
             newMaterial.SetFloat("_Glossiness", glossiness);
             newMaterial.SetFloat("_Metallic", metallic);
 
-            Material[] mats = renderer.materials;
-            int numMats = mats.Length;
-            mats[numMats-1] = newMaterial;
-            renderer.materials = mats;
+            renderer.material = newMaterial;
 
             //texture.GetPixel()
         }
@@ -55,6 +51,6 @@ public class Voxels : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //Maybe you should re-sample from the UV map at this point to get the updated colour?
     }
 }
