@@ -5,10 +5,9 @@ using UnityEngine;
 public class Voxels : MonoBehaviour
 {
     public Voxelizable original;
-
-    public Material fadeMaterial;
+    public Material referenceMaterial;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Go through each renderer
         foreach (Transform voxel in transform) {
@@ -32,12 +31,13 @@ public class Voxels : MonoBehaviour
             Color color = texture.GetPixel((int) (texture.width * uv.x), (int) (texture.height * uv.y));
 
             //Save the current shader
-            Shader shader = renderer.material.shader;
+            //Shader shader = renderer.material.shader;
             float glossiness = material.GetFloat("_Glossiness");
             float metallic = material.GetFloat("_Metallic");
 
             //Set the colour of the material -- use the fade material so that you can lerp the alpha when you make the cubes fly towards you
-            Material newMaterial = new Material(fadeMaterial);
+            Material newMaterial = new Material(referenceMaterial);
+            //color.a = 0.0f;
             newMaterial.color = color;
             newMaterial.SetFloat("_Glossiness", glossiness);
             newMaterial.SetFloat("_Metallic", metallic);

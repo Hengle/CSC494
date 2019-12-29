@@ -10,8 +10,18 @@ public class DesignSpace
     //The axis contains the xyz axes and also the different proxy points as children 
     GameObject axis;
     List<GameObject> _gameObjectList;
-
     GameObject proxyPrefab;
+
+    //Objects and values needed to create a voxelization
+    //The source gameobject is the selection that was made by the user
+    //GameObject sourceGameObject;
+    //MeshVoxelizerUtil.GenerationType generationType = MeshVoxelizerUtil.GenerationType.SeparateVoxels;
+    //MeshVoxelizerUtil.VoxelSizeType voxelSizeType = MeshVoxelizerUtil.VoxelSizeType.Subdivision;
+    //int subdivisionLevel = 1;
+    //public static float absoluteVoxelSize = 10000;
+    //public static Precision precision = Precision.Standard;
+    //public static UVConversion uvConversion = UVConversion.SourceMesh;
+
 
     public DesignSpace(string x_attr, string y_attr, string z_attr, GameObject axis, List<GameObject> _gameObjectList, GameObject proxyPrefab) {
         //This is the constructor
@@ -56,6 +66,11 @@ public class DesignSpace
         GameObject proxySphere = GameObject.Instantiate(proxyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         proxySphere.GetComponent<Proxy>().original = selection;
         proxySphere.transform.parent = this.axis.transform;
+    }
+
+    //Creates a voxelized version of the object then animates it into the current design space box
+    public void AddVoxelsToDesignSpace(GameObject selection) {
+
     }
 
 }
