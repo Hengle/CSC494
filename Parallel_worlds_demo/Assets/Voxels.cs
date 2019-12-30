@@ -12,6 +12,7 @@ public class Voxels : MonoBehaviour
         // Go through each renderer
         foreach (Transform voxel in transform) {
             MeshRenderer renderer = voxel.GetComponent<MeshRenderer>();
+            //renderer.enabled = false;
             MeshFilter meshFilter = voxel.GetComponent<MeshFilter>();
             Material material = renderer.materials[0];
             Texture2D texture = material.GetTexture("_MainTex") as Texture2D;
@@ -29,6 +30,7 @@ public class Voxels : MonoBehaviour
             //uv *= 2f;
 
             Color color = texture.GetPixel((int) (texture.width * uv.x), (int) (texture.height * uv.y));
+            color.a = 0.3f;
 
             //Save the current shader
             //Shader shader = renderer.material.shader;
