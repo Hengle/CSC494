@@ -53,6 +53,5 @@ public class Voxels : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Maybe you should re-sample from the UV map at this point to get the updated colour?
     }
 }

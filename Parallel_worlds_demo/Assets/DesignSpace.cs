@@ -55,6 +55,13 @@ public class DesignSpace
             //Add the selected item into the list if it's not already in it
             _gameObjectList.Add(selection);
             AddToDesignSpace(selection);
+
+            //highlight the selected object 
+            var outline = selection.AddComponent<Outline>();
+
+            outline.OutlineMode = Outline.Mode.OutlineAll;
+            outline.OutlineColor = Color.white;
+            outline.OutlineWidth = 5f;
         }
         
 
