@@ -12,6 +12,10 @@ public class DesignSpace
     List<GameObject> _gameObjectList;
     GameObject proxyPrefab;
 
+    float speed;
+    List<Transform> voxels = new List<Transform>();
+    List<Vector3> colors = new List<Vector3>();
+
     //Objects and values needed to create a voxelization
     //The source gameobject is the selection that was made by the user
     //GameObject sourceGameObject;
@@ -39,10 +43,33 @@ public class DesignSpace
         
     }
 
-    // Update is called once per frame
-    void Update()
+    // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!
+    public void animate()
     {
-        
+        Debug.Log("The update happened!!");
+
+        for (int i = 0; i < voxels.Count; i++)
+        {
+            Transform child = voxels[i];
+
+            speed = 0.1f;
+
+            Vector3 colorLocation = colors[i];
+            Vector3 newlocation = Vector3.Lerp(child.localPosition, colorLocation, speed);
+
+            /*
+             *Old version of the lerp that moves everything by the same speed
+            //lerp the position
+            child.localPosition = newlocation;
+            child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.5f, speed);
+            */
+            //Move each point a different amount based on the distance from the design space
+            float dist = Vector3.Distance(child.localPosition, colorLocation);
+            float t = Mathf.Clamp(Mathf.Exp(-5 * dist), 0.05f, 0.2f);
+            child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
+
+        }
+   
     }
     public GameObject getAxis() {
         return this.axis;
@@ -54,14 +81,28 @@ public class DesignSpace
         {
             //Add the selected item into the list if it's not already in it
             _gameObjectList.Add(selection);
-            AddToDesignSpace(selection);
+            if (selection.GetComponent<Voxelizable>() == null)
+            {
+                AddToDesignSpace(selection);
 
-            //highlight the selected object 
-            var outline = selection.AddComponent<Outline>();
+                //highlight the selected object in white
+                var outline = selection.AddComponent<Outline>();
+                outline.OutlineMode = Outline.Mode.OutlineAll;
+                outline.OutlineColor = Color.white;
+                outline.OutlineWidth = 5f;
+            }
+            else {
+                AddVoxelsToDesignSpace(selection);
 
-            outline.OutlineMode = Outline.Mode.OutlineAll;
-            outline.OutlineColor = Color.white;
-            outline.OutlineWidth = 5f;
+                //highlight the selected object in yellow
+                var outline = selection.AddComponent<Outline>();
+                outline.OutlineMode = Outline.Mode.OutlineAll;
+                outline.OutlineColor = Color.yellow;
+                outline.OutlineWidth = 5f;
+
+            }
+                
+
         }
         
 
@@ -70,14 +111,32 @@ public class DesignSpace
     //creates the proxy for the object in the design space
     public void AddToDesignSpace(GameObject selection)
     {
+
         GameObject proxySphere = GameObject.Instantiate(proxyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         proxySphere.GetComponent<Proxy>().original = selection;
+
         proxySphere.transform.parent = this.axis.transform;
+
     }
 
     //Creates a voxelized version of the object then animates it into the current design space box
     public void AddVoxelsToDesignSpace(GameObject selection) {
+        //Don't access selection.transform, access the selection's children's transforms!!!
+        Voxels voxel_parent = selection.GetComponentInChildren<Voxels>();
+        foreach (Transform child in voxel_parent.transform)
+        {
+            voxels.Add(child);
+            Color color = child.GetComponent<MeshRenderer>().material.color;
+            float R = color.r;
+            float G = color.g;
+            float B = color.b;
+            colors.Add(new Vector3(R, G, B));
+        }
 
+        foreach (Transform child in voxels)
+        {
+            child.SetParent(this.axis.transform);
+        }
     }
 
 }

@@ -17,6 +17,7 @@ public class Proxy : MonoBehaviour
 
         GetComponent<MeshRenderer>().material = original.GetComponent<MeshRenderer>().material;
         GetComponent<MeshFilter>().mesh = original.GetComponent<MeshFilter>().mesh;
+        GetComponent<MeshCollider>().sharedMesh = original.GetComponent<MeshFilter>().mesh;
 
         parent = transform.parent;
 

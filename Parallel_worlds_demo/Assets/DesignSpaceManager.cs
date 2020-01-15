@@ -49,11 +49,11 @@ public class DesignSpaceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (OVRInput.GetDown(OVRInput.Button.One, controller))
-        {
-            //Create a new default design space (position)
-
+        //Call the update function for each of the design spaces in that list
+        foreach (DesignSpace space in _DesignSpaceList) {
+            space.animate();
         }
+
 
     }
 }

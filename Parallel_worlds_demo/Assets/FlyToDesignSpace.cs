@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FlyToDesignSpace : MonoBehaviour
 {
-    public GameObject original;
+
     public GameObject DesignSpace;
     float speed;
     List<Transform> voxels = new List<Transform>();
@@ -26,13 +26,6 @@ public class FlyToDesignSpace : MonoBehaviour
 
         foreach (Transform child in voxels)
         {
-            //Trying to make them grabbable
-            //child.gameObject.AddComponent<Rigidbody>();
-            //child.gameObject.AddComponent<BoxCollider>();
-            //child.gameObject.GetComponent<Rigidbody>().useGravity = false;
-            //child.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            //OVRGrabbable grab = child.gameObject.AddComponent<OVRGrabbable>();
-            //grab.enabled = true;
             child.SetParent(DesignSpace.transform);
         }
     }
@@ -42,15 +35,25 @@ public class FlyToDesignSpace : MonoBehaviour
         
         for (int i=0; i<voxels.Count; i++)
         {
+            
             Transform child = voxels[i];
+            
             speed = 0.1f;
 
             Vector3 colorLocation = colors[i];
             Vector3 newlocation = Vector3.Lerp(child.localPosition, colorLocation, speed);
 
+            /*
+             *Old version of the lerp that moves everything by the same speed
             //lerp the position
             child.localPosition = newlocation;
             child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.5f, speed);
+            */
+            //Move each point a different amount based on the distance from the design space
+            float dist = Vector3.Distance(child.localPosition, colorLocation);
+            float t = Mathf.Clamp(Mathf.Exp(-5 * dist), 0.05f, 0.2f);
+            child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
+
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Voxels : MonoBehaviour
 {
-    public Voxelizable original;
     public Material referenceMaterial;
     // Start is called before the first frame update
     void Awake()
@@ -24,10 +23,6 @@ public class Voxels : MonoBehaviour
             mesh.GetUVs(0, uvs);
 
             Vector2 uv = uvs[0];
-            //uv.x -= 0.5f;
-            //uv.y -= 0.5f;
-
-            //uv *= 2f;
 
             Color color = texture.GetPixel((int) (texture.width * uv.x), (int) (texture.height * uv.y));
             color.a = 0.3f;
