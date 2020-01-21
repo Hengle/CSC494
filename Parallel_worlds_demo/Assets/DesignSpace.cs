@@ -46,8 +46,6 @@ public class DesignSpace
     // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!
     public void animate()
     {
-        Debug.Log("The update happened!!");
-
         for (int i = 0; i < voxels.Count; i++)
         {
             Transform child = voxels[i];
@@ -67,7 +65,7 @@ public class DesignSpace
             float dist = Vector3.Distance(child.localPosition, colorLocation);
             float t = Mathf.Clamp(Mathf.Exp(-5 * dist), 0.05f, 0.2f);
             child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
-
+            child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
         }
    
     }

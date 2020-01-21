@@ -8,8 +8,10 @@ public class Voxels : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        print("Awake");
         // Go through each renderer
         foreach (Transform voxel in transform) {
+            print("In the loop");
             MeshRenderer renderer = voxel.GetComponent<MeshRenderer>();
             //renderer.enabled = false;
             MeshFilter meshFilter = voxel.GetComponent<MeshFilter>();
