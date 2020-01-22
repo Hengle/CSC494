@@ -11,6 +11,9 @@ public class Proxy : MonoBehaviour
     OVRGrabbable grabbable;
     Transform parent;
 
+    //Store the position so that it can be updated every frame??
+    Vector3 past_position;
+
     void Start()
     {
         grabbable = GetComponent<OVRGrabbable>();
@@ -28,8 +31,7 @@ public class Proxy : MonoBehaviour
         transform.localPosition = original.GetComponent<MeshRenderer>().bounds.size;
         transform.localScale = original.transform.localScale;
         transform.localRotation = original.transform.localRotation;
-        print(original.transform.localScale);
-
+        past_position = transform.localPosition;
     }
     public void SetGlobalScale(Vector3 globalScale)
     {
@@ -42,14 +44,17 @@ public class Proxy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //0.2 is hardcoded so that the representations aren't too big
-        SetGlobalScale(original.transform.localScale * 0.2f);
+        //0.5 is hardcoded so that the representations aren't too big
+        SetGlobalScale(original.transform.localScale * 0.5f);
 
         Vector3 pos = parent.InverseTransformPoint(transform.position);
 
         //The issue is that the bounding box is overriding the true scale of the object! The coordinates lost information by switching to the bounding box. You should manipulate it based on the bounding box size
-        original.transform.localScale = pos;
+        //OR store the delta of the bounding box transform and change the original object by the same amount
+        Vector3 newPos = transform.localPosition - past_position;
+        original.transform.localScale += newPos;
         //use the bounding box size to scale the object?...
-
+        //Store the delta for how much it's moving and then use that to change the size!!! Use past_position-pos as the scaling factor?
+        past_position = transform.localPosition;
     }
 }
