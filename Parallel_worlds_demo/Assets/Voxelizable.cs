@@ -34,20 +34,15 @@ public class Voxelizable : MonoBehaviour
         print(texture.GetPixel(0, 0) + " " + texture.width + " " + texture.height);
 
         Color[] pixels = texture.GetPixels();
-        //print(texture.GetPixel(0, 0));
-        //for (int i = 0; i < pixels.Length; i++)
-        //{
-        //    pixels[i].r *= 0.5f;
-        //    pixels[i].g *= 0.5f;
-        //    pixels[i].b *= 0.5f;
-        //}
-
         
         newTexture.SetPixels(pixels);
         newTexture.Apply();
         material.SetTexture("_MainTex", newTexture);
-        
 
+        //Save the positions and colours of all the pixels
+        //for (transform in ) {
+
+        //}
     }
 
     // Update is called once per frame

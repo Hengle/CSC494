@@ -31,15 +31,15 @@ public class Voxels : MonoBehaviour
 
             //Save the current shader
             //Shader shader = renderer.material.shader;
-            float glossiness = material.GetFloat("_Glossiness");
-            float metallic = material.GetFloat("_Metallic");
+            //float glossiness = material.GetFloat("_Glossiness");
+            //float metallic = material.GetFloat("_Metallic");
 
             //Set the colour of the material -- use the fade material so that you can lerp the alpha when you make the cubes fly towards you
             Material newMaterial = new Material(referenceMaterial);
             //color.a = 0.0f;
             newMaterial.color = color;
-            newMaterial.SetFloat("_Glossiness", glossiness);
-            newMaterial.SetFloat("_Metallic", metallic);
+            //newMaterial.SetFloat("_Glossiness", glossiness);
+            //newMaterial.SetFloat("_Metallic", metallic);
 
             renderer.material = newMaterial;
 

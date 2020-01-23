@@ -11,9 +11,11 @@ public class VoxelRenderer : MonoBehaviour
     // Private attributes
     Material material;
 
-    Vector4[] points, colors;
+    Vector4[] points, colours;
     
-    ComputeBuffer pointsBuffer, colorBuffer;
+    ComputeBuffer pointsBuffer, colourBuffer;
+
+    public GameObject Voxels;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +24,30 @@ public class VoxelRenderer : MonoBehaviour
         material.hideFlags = HideFlags.DontSave;
         material.EnableKeyword("_COMPUTE_BUFFER");
 
+        List <GameObject> children = new List<GameObject>();
+        foreach (Transform child in Voxels.transform) {
+            children.Add(child.gameObject);
+        }
+        
+        int N = children.Count;
+        points = new Vector4[N];
+        colours = new Vector4[N];
+
+        for (int i = 0; i < N; i++)
+        {
+            points[i] = children[i].transform.position;
+            points[i].w = 1f;
+
+            Color c = children[i].GetComponent<Renderer>().material.color;
+            colours[i] = new Vector4(c.r, c.g, c.b, c.a);
+        }
+        pointsBuffer = new ComputeBuffer(N, 4 * sizeof(float));
+        pointsBuffer.SetData(points);
+
+        colourBuffer = new ComputeBuffer(N, 4 * sizeof(float));
+        colourBuffer.SetData(colours);
+
+        /*
         int N = 100_000;
         points = new Vector4[N];
         colors = new Vector4[N];
@@ -42,6 +68,7 @@ public class VoxelRenderer : MonoBehaviour
 
         colorBuffer = new ComputeBuffer(N, 4 * sizeof(float));
         colorBuffer.SetData(colors);
+        */
     }
 
     Vector3 f(float u)
@@ -58,9 +85,10 @@ public class VoxelRenderer : MonoBehaviour
 
         // Draw points
         material.SetPass(0);
-        material.SetMatrix("_Transform", transform.localToWorldMatrix);
+        //material.SetMatrix("_Transform", transform.localToWorldMatrix);
+        material.SetMatrix("_Transform", Matrix4x4.identity);
         material.SetBuffer("_PositionBuffer", pointsBuffer);
-        material.SetBuffer("_ColorBuffer", colorBuffer);
+        material.SetBuffer("_ColorBuffer", colourBuffer);
         material.SetFloat("_PointSize", size);
 
         Graphics.DrawProceduralNow(MeshTopology.Points, pointsBuffer.count, 1);
@@ -68,7 +96,7 @@ public class VoxelRenderer : MonoBehaviour
 
     private void OnDestroy()
     {
-        colorBuffer.Dispose();
+        colourBuffer.Dispose();
         pointsBuffer.Dispose();
     }
 }
