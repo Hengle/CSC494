@@ -67,7 +67,7 @@ public class Raycaster : MonoBehaviour
             pointedAt = hit.collider.gameObject;
 
             //Make sure that you aren't hitting something in the axis
-            if ((pointedAt.gameObject.transform.parent != DSManager.getMainDesignSpace().getAxis().transform) && (pointedAt.gameObject.transform != DSManager.getMainDesignSpace().getAxis().transform)){
+            if ((pointedAt.gameObject.transform.parent != DSManager.getMainDesignSpace().axis.transform) && (pointedAt.gameObject.transform != DSManager.getMainDesignSpace().axis.transform)){
                 DSManager.getMainDesignSpace().SelectObject(pointedAt);
             }
 

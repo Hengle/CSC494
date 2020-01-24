@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DesignSpace
+public class DesignSpace: MonoBehaviour
 {
-    string x_attr;
-    string y_attr;
-    string z_attr;
+    public string x_attr;
+    public string y_attr;
+    public string z_attr;
     //The axis contains the xyz axes and also the different proxy points as children 
-    GameObject axis;
-    List<GameObject> _gameObjectList;
-    GameObject proxyPrefab;
+    public GameObject axis;
+    public List<GameObject> _gameObjectList;
+    public GameObject proxyPrefab;
 
     float speed;
     List<Transform> voxels = new List<Transform>();
@@ -26,7 +26,7 @@ public class DesignSpace
     //public static Precision precision = Precision.Standard;
     //public static UVConversion uvConversion = UVConversion.SourceMesh;
 
-
+    /*
     public DesignSpace(string x_attr, string y_attr, string z_attr, GameObject axis, List<GameObject> _gameObjectList, GameObject proxyPrefab) {
         //This is the constructor
         this.x_attr = x_attr;
@@ -36,6 +36,7 @@ public class DesignSpace
         this._gameObjectList = _gameObjectList;
         this.proxyPrefab = proxyPrefab;
     }
+    */
 
     // Start is called before the first frame update
     void Start()
@@ -68,9 +69,6 @@ public class DesignSpace
             child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
         }
    
-    }
-    public GameObject getAxis() {
-        return this.axis;
     }
 
     public void SelectObject(GameObject selection)

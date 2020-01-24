@@ -37,7 +37,16 @@ public class DesignSpaceManager : MonoBehaviour
         _instance = this;
         _DesignSpaceList = new List<DesignSpace>();
         main_index = 0;
-        _DesignSpaceList.Add(new DesignSpace("Scale x", "Scale y", "Scale z", designSpace, new List<GameObject>(), proxyPrefab));
+        DesignSpace newSpace = new DesignSpace();
+
+        _DesignSpaceList.Add(newSpace);
+        newSpace.x_attr = "Scale x";
+        newSpace.y_attr = "Scale y";
+        newSpace.z_attr = "Scale z";
+        newSpace.axis = designSpace;
+        newSpace._gameObjectList = new List<GameObject>();
+        newSpace.proxyPrefab = proxyPrefab;
+        
     }
 
     // Start is called before the first frame update
