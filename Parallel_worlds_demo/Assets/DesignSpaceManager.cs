@@ -18,6 +18,7 @@ public class DesignSpaceManager : MonoBehaviour
     static List<DesignSpace> _DesignSpaceList;
     static int main_index;
 
+    public GameObject TEMPmagnet;
     /*
      * This class has the master list of design spaces
      * 
@@ -29,7 +30,7 @@ public class DesignSpaceManager : MonoBehaviour
      * 
      * 
     */
-    public DesignSpace getMainDesignSpace() {
+    public DesignSpace GetMainDesignSpace() {
         return _DesignSpaceList[main_index];
     }
     private void Awake()
@@ -37,6 +38,8 @@ public class DesignSpaceManager : MonoBehaviour
         _instance = this;
         _DesignSpaceList = new List<DesignSpace>();
         main_index = 0;
+
+        //Add the initial default design space
         DesignSpace newSpace = new DesignSpace();
 
         _DesignSpaceList.Add(newSpace);
@@ -46,7 +49,8 @@ public class DesignSpaceManager : MonoBehaviour
         newSpace.axis = designSpace;
         newSpace._gameObjectList = new List<GameObject>();
         newSpace.proxyPrefab = proxyPrefab;
-        
+        newSpace.TEMPmagnet = TEMPmagnet;
+
     }
 
     // Start is called before the first frame update
@@ -60,7 +64,7 @@ public class DesignSpaceManager : MonoBehaviour
     {
         //Call the update function for each of the design spaces in that list
         foreach (DesignSpace space in _DesignSpaceList) {
-            space.animate();
+            space.Animate();
         }
 
 

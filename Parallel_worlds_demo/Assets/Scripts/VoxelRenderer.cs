@@ -17,9 +17,16 @@ public class VoxelRenderer : MonoBehaviour
 
     public GameObject Voxels;
 
+    DesignSpaceManager DSManager;
+
+    //The design space that the voxels will fly to
+    public DesignSpace designSpace;
+
     // Start is called before the first frame update
     void Start()
     {
+        designSpace = DesignSpaceManager.instance.GetMainDesignSpace();
+
         material = new Material(shader);
         material.hideFlags = HideFlags.DontSave;
         material.EnableKeyword("_COMPUTE_BUFFER");
@@ -71,6 +78,17 @@ public class VoxelRenderer : MonoBehaviour
         */
     }
 
+    /*Updates the buffer to animate each voxel
+     */
+    void Update() {
+        //update Vector4[] points, colours; and then push it to ComputeBuffer pointsBuffer, colourBuffer;
+        //lerp each point so that it goes towards its parent
+        /*Maybe I should just get it to 
+         * This voxelrenderer is just for one object in particular. What if I 
+         */
+
+
+    }
     Vector3 f(float u)
     {
         return new Vector3(Mathf.Sin(u), Mathf.Cos(u * u), Mathf.Sin(2 * u));
@@ -85,7 +103,7 @@ public class VoxelRenderer : MonoBehaviour
 
         // Draw points
         material.SetPass(0);
-        //material.SetMatrix("_Transform", transform.localToWorldMatrix);
+        //material.SetMatrix("_Transform", transform.localToWorldMatrix); // This would have transformed it into the local space
         material.SetMatrix("_Transform", Matrix4x4.identity);
         material.SetBuffer("_PositionBuffer", pointsBuffer);
         material.SetBuffer("_ColorBuffer", colourBuffer);
