@@ -54,7 +54,9 @@ public class DesignSpaceManager : MonoBehaviour
         newSpace.TEMPconstraint = TEMPconstraint;
 
     }
-
+    public void AddDesignSpaceToList(DesignSpace newSpace) {
+        _DesignSpaceList.Add(newSpace);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -64,9 +66,22 @@ public class DesignSpaceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        int i = 0;
         //Call the update function for each of the design spaces in that list
         foreach (DesignSpace space in _DesignSpaceList) {
             space.Animate();
+            
+            /*
+            if (main_index == i)
+            {
+                space.outline.enabled = true;
+            }
+            else {
+                space.outline.enabled = false;
+            }
+            */
+            //Also set the design space origin blocks to be the right colours
+            i += 1;
         }
 
 

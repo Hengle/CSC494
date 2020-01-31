@@ -22,10 +22,18 @@ public class DesignSpace: MonoBehaviour
     public GameObject TEMPmagnet;
     public GameObject TEMPconstraint;
 
-    // Start is called before the first frame update
-    void Start()
-    {
 
+    //Adding the highlight as disabled to begin with
+    public Outline outline;
+
+    // Start is called before the first frame update
+    void Awake()
+    {
+        outline = axis.AddComponent<Outline>();
+        outline.OutlineMode = Outline.Mode.OutlineAll;
+        outline.OutlineColor = Color.white;
+        outline.OutlineWidth = 2f;
+        outline.enabled = false;
     }
 
     // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!
