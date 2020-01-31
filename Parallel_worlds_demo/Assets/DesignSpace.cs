@@ -20,6 +20,8 @@ public class DesignSpace: MonoBehaviour
     public List<GameObject> constraintList = new List<GameObject>();
 
     public GameObject TEMPmagnet;
+    public GameObject TEMPconstraint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +33,10 @@ public class DesignSpace: MonoBehaviour
     {
         if (magnetsList.Contains(TEMPmagnet) == false) {
             magnetsList.Add(TEMPmagnet);
+        }
+        if (constraintList.Contains(TEMPconstraint) == false)
+        {
+            constraintList.Add(TEMPconstraint);
         }
         //Move the voxels that have reached their location into the main list
         for (int i = 0; i < voxels.Count; i++) {
@@ -52,6 +58,7 @@ public class DesignSpace: MonoBehaviour
 
                 Vector3 colorLocation = colors[i];
                 Vector3 newlocation = Vector3.Lerp(child.localPosition, colorLocation, speed);
+                child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.7f, speed);
 
                 /*
                     *Old version of the lerp that moves everything by the same speed
@@ -77,9 +84,17 @@ public class DesignSpace: MonoBehaviour
 
                 float sphereRadius = magnetsList[j].GetComponent<Renderer>().bounds.extents.magnitude;
                 float otherRadius = magnetsList[j].GetComponent<SphereCollider>().radius;
-                if (distance < sphereRadius) {
-                    //lerp it towards the magnet's centre
-                    _gameObjectList[i].transform.localPosition = Vector3.Lerp(_gameObjectList[i].transform.localPosition, magnetsList[j].transform.localPosition, 0.09f);
+
+                for (int k = 0; k < constraintList.Count; k++)
+                {
+                    float constraintRadius = constraintList[k].GetComponent<Renderer>().bounds.extents.magnitude;
+                    float constraintDistance = Vector3.Distance(constraintList[k].transform.localPosition, _gameObjectList[i].transform.localPosition);
+
+                    if (distance < sphereRadius && constraintDistance > constraintRadius)
+                    {
+                        //lerp it towards the magnet's centre
+                        _gameObjectList[i].transform.localPosition = Vector3.Lerp(_gameObjectList[i].transform.localPosition, magnetsList[j].transform.localPosition, 0.09f);
+                    }
                 }
 
             }

@@ -19,6 +19,7 @@ public class DesignSpaceManager : MonoBehaviour
     static int main_index;
 
     public GameObject TEMPmagnet;
+    public GameObject TEMPconstraint;
     /*
      * This class has the master list of design spaces
      * 
@@ -50,6 +51,7 @@ public class DesignSpaceManager : MonoBehaviour
         newSpace._gameObjectList = new List<GameObject>();
         newSpace.proxyPrefab = proxyPrefab;
         newSpace.TEMPmagnet = TEMPmagnet;
+        newSpace.TEMPconstraint = TEMPconstraint;
 
     }
 
