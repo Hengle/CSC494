@@ -108,7 +108,7 @@ public class DesignSpace: MonoBehaviour
 
                         //TODO Ohhh the gameobjects list is the oroiginal object! Not the proxy!!! That's why this isn't working
 
-                        _gameObjectList[i].transform.localPosition = Vector3.Lerp(proxyList[i].transform.localPosition, magnetsList[j].transform.localPosition, 0.09f);
+                        proxyList[i].transform.localPosition = Vector3.Lerp(proxyList[i].transform.localPosition, magnetsList[j].transform.localPosition, 0.09f);
                     }
                 }
 
