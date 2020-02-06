@@ -25,16 +25,17 @@ public class RangeSlider : MonoBehaviour
 
     void Start()
     {
-        minGrabbable.OnGrabbed += (grabber, collider) => {minGrabbed = true; hand = grabber.GetComponent<HandController>();};
+        //minGrabbable.OnGrabbed += (grabber, collider) => {minGrabbed = true; hand = grabber.GetComponent<HandController>();};
         maxGrabbable.OnGrabbed += (grabber, collider) => {maxGrabbed = true; hand = grabber.GetComponent<HandController>();};
 
-        minGrabbable.OnReleased += (linvel, angvel) => {minGrabbed = false;};
+        //minGrabbable.OnReleased += (linvel, angvel) => {minGrabbed = false;};
         maxGrabbable.OnReleased += (linvel, angvel) => {maxGrabbed = false;};
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*
         // Min grabbed
         if (minGrabbed)
         {
@@ -59,7 +60,7 @@ public class RangeSlider : MonoBehaviour
         {
             minGrabbable.transform.position = min.transform.position;
         }
-        
+        */
 
         // Max grabbed
         if (maxGrabbed)
@@ -89,7 +90,7 @@ public class RangeSlider : MonoBehaviour
         highlightPipe.position = (max.position + min.position) / 2f;
         highlightPipe.localScale = highlightPipe.localScale.SetY(0.05f * math.abs(maxValue - minValue));
 
-        minGrabbable.transform.localScale = (float3) 0.01f;
+        //minGrabbable.transform.localScale = (float3) 0.01f;
         maxGrabbable.transform.localScale = (float3) 0.01f;
     }
 
