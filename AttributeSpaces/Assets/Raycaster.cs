@@ -68,7 +68,7 @@ public class Raycaster : MonoBehaviour
 
             //Make sure that you aren't hitting something in the axis. If it's in an axis, do not select
             //TODO change this to check ALL design spaces
-            if ((pointedAt.gameObject.transform.parent != DSManager.GetMainDesignSpace().axis.transform) && (pointedAt.gameObject.transform != DSManager.GetMainDesignSpace().axis.transform)){
+            if ((pointedAt.gameObject.transform.parent != DSManager.GetMainDesignSpace().gameObject.transform) && (pointedAt.gameObject.transform != DSManager.GetMainDesignSpace().gameObject.transform)){
                 DSManager.GetMainDesignSpace().SelectObject(pointedAt);
             }
 

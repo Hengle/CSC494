@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class DesignSpace: MonoBehaviour
 {
-    public string x_attr;
-    public string y_attr;
-    public string z_attr;
+    public RangeSlider x_attr;
+    public RangeSlider y_attr;
+    public RangeSlider z_attr;
     //The axis contains the xyz axes and also the different proxy points as children 
-    public GameObject axis;
     public List<GameObject> _gameObjectList;
     public GameObject proxyPrefab;
+    public GameObject controlCube;
 
     float speed;
     List<Transform> voxels = new List<Transform>();
@@ -20,6 +20,7 @@ public class DesignSpace: MonoBehaviour
     public List<GameObject> magnetsList = new List<GameObject>();
     public List<GameObject> constraintList = new List<GameObject>();
 
+    //TODO make it take anythin that is under the Magnets folder (same with constraints)
     public GameObject TEMPmagnet;
     public GameObject TEMPconstraint;
 
@@ -28,16 +29,29 @@ public class DesignSpace: MonoBehaviour
     public Outline outline;
 
     // Start is called before the first frame update
+    private void Start()
+    {
+        //Add itself to the Design Space Manager's list of objects
+        DesignSpaceManager.instance.AddDesignSpaceToList(this);
+    }
     void Awake()
     {
+        /*
         outline = axis.AddComponent<Outline>();
         outline.OutlineMode = Outline.Mode.OutlineAll;
         outline.OutlineColor = Color.white;
         outline.OutlineWidth = 2f;
+        */
         //outline.enabled = false;
     }
 
     // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!
+    public void Update()
+    {
+        //Update the slider location based on where the box is (but only the one component that changed)
+        Vector3 temp = new Vector3(controlCube.transform.localPosition.x, x_attr.max.localPosition.y, x_attr.max.localPosition.z);
+        x_attr.max.localPosition = temp;
+    }
     public void Animate()
     {
         if (magnetsList.Contains(TEMPmagnet) == false) {
@@ -47,6 +61,8 @@ public class DesignSpace: MonoBehaviour
         {
             constraintList.Add(TEMPconstraint);
         }
+
+
         //Move the voxels that have reached their location into the main list
         for (int i = 0; i < voxels.Count; i++) {
             Transform child = voxels[i];
@@ -157,7 +173,7 @@ public class DesignSpace: MonoBehaviour
         GameObject proxySphere = GameObject.Instantiate(proxyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         proxySphere.GetComponent<Proxy>().original = selection;
 
-        proxySphere.transform.parent = this.axis.transform;
+        proxySphere.transform.parent = this.transform;
 
         proxyList.Add(proxySphere);
 
@@ -179,7 +195,7 @@ public class DesignSpace: MonoBehaviour
 
         foreach (Transform child in voxels)
         {
-            child.SetParent(this.axis.transform);
+            child.SetParent(this.transform);
         }
     }
 

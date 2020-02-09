@@ -12,14 +12,11 @@ public class DesignSpaceManager : MonoBehaviour
     static DesignSpaceManager _instance;
 
     public GameObject proxyPrefab;
-    public GameObject designSpace;
 
     //static List<GameObject> _gameObjectList;
     static List<DesignSpace> _DesignSpaceList;
     static int main_index;
 
-    public GameObject TEMPmagnet;
-    public GameObject TEMPconstraint;
     /*
      * This class has the master list of design spaces
      * 
@@ -32,26 +29,16 @@ public class DesignSpaceManager : MonoBehaviour
      * 
     */
     public DesignSpace GetMainDesignSpace() {
-        return _DesignSpaceList[main_index];
+        if (_DesignSpaceList.Count > 0) {
+            return _DesignSpaceList[main_index];
+        }
+        return null;
     }
     private void Awake()
     {
         _instance = this;
         _DesignSpaceList = new List<DesignSpace>();
         main_index = 0;
-
-        //Add the initial default design space
-        DesignSpace newSpace = new DesignSpace();
-
-        _DesignSpaceList.Add(newSpace);
-        newSpace.x_attr = "Scale x";
-        newSpace.y_attr = "Scale y";
-        newSpace.z_attr = "Scale z";
-        newSpace.axis = designSpace;
-        newSpace._gameObjectList = new List<GameObject>();
-        newSpace.proxyPrefab = proxyPrefab;
-        newSpace.TEMPmagnet = TEMPmagnet;
-        newSpace.TEMPconstraint = TEMPconstraint;
 
     }
     public void AddDesignSpaceToList(DesignSpace newSpace) {
