@@ -25,6 +25,7 @@ public class DesignSpace: MonoBehaviour
     public GameObject TEMPmagnet;
     public GameObject TEMPconstraint;
 
+    Vector3 controlCubeLocation;
 
     //Adding the highlight as disabled to begin with
     public Outline outline;
@@ -34,6 +35,7 @@ public class DesignSpace: MonoBehaviour
     {
         //Add itself to the Design Space Manager's list of objects
         DesignSpaceManager.instance.AddDesignSpaceToList(this);
+        controlCubeLocation = controlCube.transform.position;
     }
 
     void Awake()
@@ -53,15 +55,65 @@ public class DesignSpace: MonoBehaviour
         //Update the slider location based on where the box is (but only the one component that changed)                            
         //The range for the slider goes from -0.5 to 0.5 so you need to add an offset
 
-        x_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
-        x_attr.UpdateMax();
 
-        
-        y_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
-        y_attr.UpdateMax();
+        if (controlCube.isGrabbed)
+        {
 
-        z_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.z - 0.5f, 0f, 0f);
-        z_attr.UpdateMax();
+            x_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
+            x_attr.UpdateMax();
+
+            y_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
+            y_attr.UpdateMax();
+
+            z_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.z - 0.5f, 0f, 0f);
+            z_attr.UpdateMax();
+
+        }
+        else if (x_attr.maxGrabbable.isGrabbed || y_attr.maxGrabbable.isGrabbed || z_attr.maxGrabbable.isGrabbed)
+        {
+            controlCube.transform.localPosition = new Vector3(x_attr.maxValue, y_attr.maxValue, z_attr.maxValue);
+        }
+        else { // default case is to update based on the cube location
+            x_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
+            x_attr.UpdateMax();
+
+            y_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
+            y_attr.UpdateMax();
+
+            z_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.z - 0.5f, 0f, 0f);
+            z_attr.UpdateMax();
+        }
+
+
+
+
+        if ((controlCube.isGrabbed) && (controlCubeLocation != controlCube.transform.position))
+        {
+            //Update the location of the objects based on where the controller is now (if it updated)
+            for (int i = 0; i < proxyList.Count; i++)
+            {
+                Vector3 delta = transform.InverseTransformVector(controlCube.transform.position - controlCubeLocation);
+                proxyList[i].transform.localPosition += delta;
+                proxyList[i].transform.localPosition = Vector3.Max(proxyList[i].transform.localPosition, Vector3.zero);
+                //proxyList[i].GetInstanceID
+            }
+
+
+        }
+        else if ((x_attr.maxGrabbable.isGrabbed || y_attr.maxGrabbable.isGrabbed || z_attr.maxGrabbable.isGrabbed))
+        {
+            //Update the location of the objects based on where the controller is now (if it updated)
+            for (int i = 0; i < proxyList.Count; i++)
+            {
+                Vector3 delta = transform.InverseTransformVector(controlCube.transform.position - controlCubeLocation);
+                proxyList[i].transform.localPosition += delta;
+                proxyList[i].transform.localPosition = Vector3.Max(proxyList[i].transform.localPosition, Vector3.zero);
+                //proxyList[i].GetInstanceID
+            }
+        }
+
+        controlCubeLocation = controlCube.transform.position;
+        //At this point, if the controller cube's location doesn't match the slider, update based on the slider
 
 
         //Also check if the slider has been updated manually and move the cube if it has

@@ -15,7 +15,7 @@ public class DesignSpaceManager : MonoBehaviour
 
     //static List<GameObject> _gameObjectList;
     static List<DesignSpace> _DesignSpaceList;
-    static int main_index;
+    public int main_index;
 
     /*
      * This class has the master list of design spaces
@@ -29,10 +29,15 @@ public class DesignSpaceManager : MonoBehaviour
      * 
     */
     public DesignSpace GetMainDesignSpace() {
-        if (_DesignSpaceList.Count > 0) {
+        if (_DesignSpaceList.Count > 0)
+        {
             return _DesignSpaceList[main_index];
         }
-        return null;
+        else {
+            print("No design spaces!");
+            return null;
+        }
+        
     }
     private void Awake()
     {
@@ -59,7 +64,8 @@ public class DesignSpaceManager : MonoBehaviour
         {
             space.Animate();
 
-            if (space.outline) {
+            if (space.outline)
+            {
                 if (main_index == i)
                 {
                     space.outline.enabled = true;
@@ -72,7 +78,17 @@ public class DesignSpaceManager : MonoBehaviour
             //Also set the design space origin blocks to be the right colours
             i += 1;
         }
-
-
+        print(_DesignSpaceList.Count);
+        if (OVRInput.GetDown(OVRInput.Button.Three, controller))
+        {
+            
+            if (main_index + 1 >= _DesignSpaceList.Count)
+            {
+                main_index = 0;
+            }
+            else {
+                main_index += 1;
+            }
+        }
     }
 }

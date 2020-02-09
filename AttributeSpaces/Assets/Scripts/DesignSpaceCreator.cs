@@ -30,7 +30,7 @@ public class DesignSpaceCreator : MonoBehaviour
             clonedDesignSpace.proxyPrefab = mainDesignSpace.proxyPrefab;
 
             //Now Add this design space axis to the list of design spaces
-            DesignSpaceManager.instance.AddDesignSpaceToList(clonedDesignSpace);
+            //DesignSpaceManager.instance.AddDesignSpaceToList(clonedDesignSpace);
 
         }
     }

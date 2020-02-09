@@ -66,7 +66,6 @@ public class RangeSlider : MonoBehaviour
         if (maxGrabbed)
         {
             UpdateMax();
-
         }
 
         highlightPipe.position = (maxVisual.position + minVisual.position) / 2f;
