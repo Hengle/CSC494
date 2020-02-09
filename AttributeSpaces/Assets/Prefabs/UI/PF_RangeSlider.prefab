@@ -704,8 +704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee658578083b7a544a2f28e24d3e3e0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  min: {fileID: 164830580095033902}
-  max: {fileID: 164830580316633448}
+  minVisual: {fileID: 164830580095033902}
+  maxVisual: {fileID: 164830580316633448}
   minGrabbable: {fileID: 8914062241162919635}
   maxGrabbable: {fileID: 6365828589266351595}
   minText: {fileID: 7226359151870415171}

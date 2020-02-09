@@ -9,7 +9,7 @@ public delegate void OnRangeSliderUpdatedEvent();
 
 public class RangeSlider : MonoBehaviour
 {
-    public Transform min, max;
+    public Transform minVisual, maxVisual;
     public OVRGrabbable minGrabbable, maxGrabbable;
     public TextMesh minText, maxText, label;
     public Transform pipe, highlightPipe;
@@ -29,7 +29,7 @@ public class RangeSlider : MonoBehaviour
         maxGrabbable.OnGrabbed += (grabber, collider) => {maxGrabbed = true; hand = grabber.GetComponent<HandController>();};
 
         //minGrabbable.OnReleased += (linvel, angvel) => {minGrabbed = false;};
-        maxGrabbable.OnReleased += (linvel, angvel) => {maxGrabbed = false;};
+        maxGrabbable.OnReleased += (linvel, angvel) => {maxGrabbed = false; maxGrabbable.transform.position = maxVisual.transform.position; };
     }
 
     // Update is called once per frame
@@ -65,33 +65,34 @@ public class RangeSlider : MonoBehaviour
         // Max grabbed
         if (maxGrabbed)
         {
-            max.transform.position = maxGrabbable.transform.position;
+            UpdateMax();
 
-            float t = math.clamp(max.transform.localPosition.x, minValue - 0.4f, 0.5f);
-
-            maxValue = t + 0.5f;
-            max.transform.localPosition = new float3(t, 0f, 0f);
-
-            string label = maxValue.ToString("0.00");
-
-            if (maxText.text != label)
-            {
-                //hand?.Vibrate(0.1f, 0.1f);
-                maxText.text = label;
-
-                if (OnRangeSliderUpdated != null) OnRangeSliderUpdated();
-            }
-        }
-        else
-        {
-            maxGrabbable.transform.position = max.transform.position;
         }
 
-        highlightPipe.position = (max.position + min.position) / 2f;
+        highlightPipe.position = (maxVisual.position + minVisual.position) / 2f;
         highlightPipe.localScale = highlightPipe.localScale.SetY(0.05f * math.abs(maxValue - minValue));
 
         //minGrabbable.transform.localScale = (float3) 0.01f;
         maxGrabbable.transform.localScale = (float3) 0.01f;
+    }
+
+    public void UpdateMax()
+    {
+        maxVisual.transform.position = maxGrabbable.transform.position;
+
+        float t = math.clamp(maxVisual.transform.localPosition.x, minValue - 0.4f, 0.5f);
+
+        maxValue = t + 0.5f;
+        maxVisual.transform.localPosition = new float3(t, 0f, 0f);
+
+        string label = maxValue.ToString("0.00");
+
+        if (maxText.text != label)
+        {
+            //hand?.Vibrate(0.1f, 0.1f);
+            maxText.text = label;
+            if (OnRangeSliderUpdated != null) OnRangeSliderUpdated();
+        }
     }
 
     public void Disable()

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities;
 
 public class DesignSpace: MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class DesignSpace: MonoBehaviour
     //The axis contains the xyz axes and also the different proxy points as children 
     public List<GameObject> _gameObjectList;
     public GameObject proxyPrefab;
-    public GameObject controlCube;
+    public OVRGrabbable controlCube;
 
     float speed;
     List<Transform> voxels = new List<Transform>();
@@ -34,6 +35,7 @@ public class DesignSpace: MonoBehaviour
         //Add itself to the Design Space Manager's list of objects
         DesignSpaceManager.instance.AddDesignSpaceToList(this);
     }
+
     void Awake()
     {
         /*
@@ -48,10 +50,30 @@ public class DesignSpace: MonoBehaviour
     // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!
     public void Update()
     {
-        //Update the slider location based on where the box is (but only the one component that changed)
-        Vector3 temp = new Vector3(controlCube.transform.localPosition.x, x_attr.max.localPosition.y, x_attr.max.localPosition.z);
-        x_attr.max.localPosition = temp;
+        //Update the slider location based on where the box is (but only the one component that changed)                            
+        //The range for the slider goes from -0.5 to 0.5 so you need to add an offset
+
+        x_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
+        x_attr.UpdateMax();
+
+        
+        y_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
+        y_attr.UpdateMax();
+
+        z_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.z - 0.5f, 0f, 0f);
+        z_attr.UpdateMax();
+
+
+        //Also check if the slider has been updated manually and move the cube if it has
+        //controlCube.transform.localPosition = new Vector3(z_attr.maxGrabbable.transform.localPosition.x + 0.5f, z_attr.maxGrabbable.transform.localPosition.x + 0.5f, z_attr.maxGrabbable.transform.localPosition.x + 0.5f);
+
+        //Vector3 temp1 = new Vector3(y_attr.maxVisual.localPosition.x, controlCube.transform.localPosition.y, y_attr.maxVisual.localPosition.z);
+        //y_attr.maxVisual.localPosition = temp1;
+
+        //Vector3 temp2 = new Vector3(z_attr.maxVisual.localPosition.x, z_attr.maxVisual.localPosition.y, controlCube.transform.localPosition.z);
+        //z_attr.maxVisual.localPosition = temp2;
     }
+
     public void Animate()
     {
         if (magnetsList.Contains(TEMPmagnet) == false) {
