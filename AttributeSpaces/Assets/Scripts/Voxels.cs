@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Voxels : MonoBehaviour
 {
+    public GameObject originalObject;
     public Material referenceMaterial;
     // Start is called before the first frame update
     void Awake()

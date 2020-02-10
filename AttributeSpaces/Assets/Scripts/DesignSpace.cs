@@ -12,6 +12,8 @@ public class DesignSpace: MonoBehaviour
     public List<GameObject> _gameObjectList;
     public GameObject proxyPrefab;
     public OVRGrabbable controlCube;
+    //List of the objects that were used to make each voxel (same length as the voxels)
+    public List<GameObject> voxelOriginals;
 
     float speed;
     List<Transform> voxels = new List<Transform>();
@@ -113,17 +115,14 @@ public class DesignSpace: MonoBehaviour
         }
 
         controlCubeLocation = controlCube.transform.position;
-        //At this point, if the controller cube's location doesn't match the slider, update based on the slider
 
+        //Update the colour of the mesh based on the control cube location
+        if(voxelOriginals.Count > 0) {
+            voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaRed", controlCube.transform.localPosition.x);
+            voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaGreen", controlCube.transform.localPosition.y);
+            voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", controlCube.transform.localPosition.z);
+        }
 
-        //Also check if the slider has been updated manually and move the cube if it has
-        //controlCube.transform.localPosition = new Vector3(z_attr.maxGrabbable.transform.localPosition.x + 0.5f, z_attr.maxGrabbable.transform.localPosition.x + 0.5f, z_attr.maxGrabbable.transform.localPosition.x + 0.5f);
-
-        //Vector3 temp1 = new Vector3(y_attr.maxVisual.localPosition.x, controlCube.transform.localPosition.y, y_attr.maxVisual.localPosition.z);
-        //y_attr.maxVisual.localPosition = temp1;
-
-        //Vector3 temp2 = new Vector3(z_attr.maxVisual.localPosition.x, z_attr.maxVisual.localPosition.y, controlCube.transform.localPosition.z);
-        //z_attr.maxVisual.localPosition = temp2;
     }
 
     public void Animate()
@@ -201,7 +200,6 @@ public class DesignSpace: MonoBehaviour
                         proxyList[i].transform.localPosition = Vector3.Lerp(proxyList[i].transform.localPosition, magnetsList[j].transform.localPosition, 0.09f);
                     }
                 }
-
             }
         }
 
@@ -257,8 +255,10 @@ public class DesignSpace: MonoBehaviour
     public void AddVoxelsToDesignSpace(GameObject selection) {
         //Don't access selection.transform, access the selection's children's transforms!!!
         Voxels voxel_parent = selection.GetComponentInChildren<Voxels>();
+
         foreach (Transform child in voxel_parent.transform)
         {
+            voxelOriginals.Add(selection.GetComponentInChildren<Voxels>().originalObject);
             voxels.Add(child);
             Color color = child.GetComponent<MeshRenderer>().material.color;
             float R = color.r;
