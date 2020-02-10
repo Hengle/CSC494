@@ -79,7 +79,8 @@ public class RangeSlider : MonoBehaviour
     {
         maxVisual.transform.position = maxGrabbable.transform.position;
 
-        float t = math.clamp(maxVisual.transform.localPosition.x, minValue - 0.4f, 0.5f);
+        //float t = math.clamp(maxVisual.transform.localPosition.x, minValue - 0.4f, 0.5f);
+        float t = math.clamp(maxVisual.transform.localPosition.x, minValue - 0.5f, 0.5f);
 
         maxValue = t + 0.5f;
         maxVisual.transform.localPosition = new float3(t, 0f, 0f);
