@@ -17,6 +17,8 @@ public class RangeSlider : MonoBehaviour
     [NonSerialized] public bool minGrabbed, maxGrabbed;
 
     [NonSerialized] public float minValue = 0f;
+
+    [RangeAttribute(0.0f, 1.0f)]
     [NonSerialized] public float maxValue = 1f;
 
     HandController hand;

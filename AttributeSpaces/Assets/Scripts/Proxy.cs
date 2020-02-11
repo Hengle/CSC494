@@ -47,8 +47,12 @@ public class Proxy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //Only call this if the parent is the main design space
+
+
         //0.5 is hardcoded so that the representations aren't too big
-        SetGlobalScale(original.transform.localScale * 0.5f);
+        SetGlobalScale(original.transform.localScale * 0.1f);
 
         Vector3 pos = parent.InverseTransformPoint(transform.position);
 

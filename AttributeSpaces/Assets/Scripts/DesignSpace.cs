@@ -19,13 +19,12 @@ public class DesignSpace: MonoBehaviour
     List<Transform> voxels = new List<Transform>();
     List<Vector3> colors = new List<Vector3>();
 
-    public List<GameObject> proxyList = new List<GameObject>();
-    public List<GameObject> magnetsList = new List<GameObject>();
-    public List<GameObject> constraintList = new List<GameObject>();
+    public GameObject magnetParent;
+    public GameObject constraintParent;
 
-    //TODO make it take anythin that is under the Magnets folder (same with constraints)
-    public GameObject TEMPmagnet;
-    public GameObject TEMPconstraint;
+    public List<GameObject> proxyList = new List<GameObject>();
+    List<GameObject> magnetList = new List<GameObject>();
+    List<GameObject> constraintList = new List<GameObject>();
 
     Vector3 controlCubeLocation;
 
@@ -41,6 +40,15 @@ public class DesignSpace: MonoBehaviour
 
         //Set it to be tiny by default
         transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+        //Add all the magnets and constraints to the list
+        foreach (Transform child in magnetParent.transform) {
+            magnetList.Add(child.gameObject); 
+        }
+        foreach (Transform child in constraintParent.transform)
+        {
+            constraintList.Add(child.gameObject);
+        }
 
     }
 
@@ -121,14 +129,6 @@ public class DesignSpace: MonoBehaviour
 
     public void Animate()
     {
-        if (magnetsList.Contains(TEMPmagnet) == false) {
-            magnetsList.Add(TEMPmagnet);
-        }
-        if (constraintList.Contains(TEMPconstraint) == false)
-        {
-            constraintList.Add(TEMPconstraint);
-        }
-
 
         //Move the voxels that have reached their location into the main list
         for (int i = 0; i < voxels.Count; i++) {
@@ -169,15 +169,15 @@ public class DesignSpace: MonoBehaviour
         //Move things in _gameObjectList
         for (int i = 0; i < proxyList.Count; i++) {
             //Check all the magnets
-            for (int j = 0; j < magnetsList.Count; j++) {
+            for (int j = 0; j < magnetList.Count; j++) {
                 //If it intersects with the valid region of a magnet, move it
                 
-                Vector3 magnett = magnetsList[j].transform.localPosition;
+                Vector3 magnett = magnetList[j].transform.localPosition;
 
-                float distance = Vector3.Distance(magnetsList[j].transform.localPosition, proxyList[i].transform.localPosition);
+                float distance = Vector3.Distance(magnetList[j].transform.localPosition, proxyList[i].transform.localPosition);
 
-                float sphereRadius = magnetsList[j].GetComponent<Renderer>().bounds.extents.magnitude;
-                float otherRadius = magnetsList[j].GetComponent<SphereCollider>().radius;
+                float sphereRadius = magnetList[j].GetComponent<Renderer>().bounds.extents.magnitude;
+                float otherRadius = magnetList[j].GetComponent<SphereCollider>().radius;
 
                 //Check that it's not too close to one of the constraints
                 for (int k = 0; k < constraintList.Count; k++)
@@ -191,7 +191,7 @@ public class DesignSpace: MonoBehaviour
 
                         //TODO Ohhh the gameobjects list is the oroiginal object! Not the proxy!!! That's why this isn't working
 
-                        proxyList[i].transform.localPosition = Vector3.Lerp(proxyList[i].transform.localPosition, magnetsList[j].transform.localPosition, 0.09f);
+                        proxyList[i].transform.localPosition = Vector3.Lerp(proxyList[i].transform.localPosition, magnetList[j].transform.localPosition, 0.09f);
                     }
                 }
             }
@@ -232,33 +232,16 @@ public class DesignSpace: MonoBehaviour
 
     }
 
-    /*
-    public void EnableOutline() {
-        if (outline)
-        {
-            outline.enabled = false;
-        }
-    }
-
-    public void DisableOutline()
-    {
-        if (outline)
-        {
-            outline.enabled = false;
-        }
-    }
-    */
     //creates the proxy for the object in the design space
     public void AddToDesignSpace(GameObject selection)
     {
-
         GameObject proxySphere = GameObject.Instantiate(proxyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         proxySphere.GetComponent<Proxy>().original = selection;
 
         proxySphere.transform.parent = this.transform;
+        //proxySphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
 
         proxyList.Add(proxySphere);
-
     }
 
     //Creates a voxelized version of the object then animates it into the current design space box
@@ -283,4 +266,8 @@ public class DesignSpace: MonoBehaviour
         }
     }
 
+    //Applies the deltas shown by the space to the objects in the real scene
+    public void ApplyToWorld() {
+        //Loop through all the objects and 
+    }
 }
