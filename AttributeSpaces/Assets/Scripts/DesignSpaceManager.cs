@@ -52,43 +52,41 @@ public class DesignSpaceManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        int i = 0;
-        //Call the update function for each of the design spaces in that list
-        foreach (DesignSpace space in _DesignSpaceList)
+        
+        //enable in case it isn't already
+        if (_DesignSpaceList[main_index])
         {
-            space.Animate();
-
-            if (space.outline)
-            {
-                if (main_index == i)
-                {
-                    space.outline.enabled = true;
-                }
-                else
-                {
-                    space.outline.enabled = false;
-                }
-            }
-            //Also set the design space origin blocks to be the right colours
-            i += 1;
+            _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         }
+        
+        foreach (DesignSpace space in _DesignSpaceList) { 
+            space.Animate();
+        }
+
         print(_DesignSpaceList.Count);
         if (OVRInput.GetDown(OVRInput.Button.Three, controller))
         {
             
             if (main_index + 1 >= _DesignSpaceList.Count)
             {
+                //_DesignSpaceList[main_index].DisableOutline();
+                _DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 main_index = 0;
+                _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
             else {
+                _DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 main_index += 1;
+                _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
         }
+
+
     }
 }

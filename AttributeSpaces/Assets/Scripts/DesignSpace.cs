@@ -30,7 +30,7 @@ public class DesignSpace: MonoBehaviour
     Vector3 controlCubeLocation;
 
     //Adding the highlight as disabled to begin with
-    public Outline outline;
+    //Outline outline;
 
     // Start is called before the first frame update
     private void Start()
@@ -38,18 +38,12 @@ public class DesignSpace: MonoBehaviour
         //Add itself to the Design Space Manager's list of objects
         DesignSpaceManager.instance.AddDesignSpaceToList(this);
         controlCubeLocation = controlCube.transform.position;
+
+        //Set it to be tiny by default
+        transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
     }
 
-    void Awake()
-    {
-        /*
-        outline = axis.AddComponent<Outline>();
-        outline.OutlineMode = Outline.Mode.OutlineAll;
-        outline.OutlineColor = Color.white;
-        outline.OutlineWidth = 2f;
-        */
-        //outline.enabled = false;
-    }
 
     // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!
     public void Update()
@@ -216,19 +210,19 @@ public class DesignSpace: MonoBehaviour
                 AddToDesignSpace(selection);
 
                 //highlight the selected object in white
-                var outline = selection.AddComponent<Outline>();
-                outline.OutlineMode = Outline.Mode.OutlineAll;
-                outline.OutlineColor = Color.white;
-                outline.OutlineWidth = 5f;
+                var whiteOutline = selection.AddComponent<Outline>();
+                whiteOutline.OutlineMode = Outline.Mode.OutlineAll;
+                whiteOutline.OutlineColor = Color.white;
+                whiteOutline.OutlineWidth = 5f;
             }
             else {
                 AddVoxelsToDesignSpace(selection);
 
                 //highlight the selected object in yellow
-                var outline = selection.AddComponent<Outline>();
-                outline.OutlineMode = Outline.Mode.OutlineAll;
-                outline.OutlineColor = Color.yellow;
-                outline.OutlineWidth = 5f;
+                var yellowOutline = selection.AddComponent<Outline>();
+                yellowOutline.OutlineMode = Outline.Mode.OutlineAll;
+                yellowOutline.OutlineColor = Color.yellow;
+                yellowOutline.OutlineWidth = 5f;
 
             }
                 
@@ -238,6 +232,22 @@ public class DesignSpace: MonoBehaviour
 
     }
 
+    /*
+    public void EnableOutline() {
+        if (outline)
+        {
+            outline.enabled = false;
+        }
+    }
+
+    public void DisableOutline()
+    {
+        if (outline)
+        {
+            outline.enabled = false;
+        }
+    }
+    */
     //creates the proxy for the object in the design space
     public void AddToDesignSpace(GameObject selection)
     {
