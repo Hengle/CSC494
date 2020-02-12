@@ -25,8 +25,6 @@ public class Proxy : MonoBehaviour
         }
         parent = transform.parent;
         if (original.GetComponent<MeshRenderer>()) { 
-            
-
             //Change this to use the bounding box instead of the local scale!!! Not sure how to get a rotation-invariant bounding box though
             //transform.localPosition = original.transform.localScale;
 

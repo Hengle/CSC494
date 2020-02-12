@@ -26,6 +26,8 @@ public class DesignSpace: MonoBehaviour
     List<GameObject> magnetList = new List<GameObject>();
     List<GameObject> constraintList = new List<GameObject>();
 
+    public bool isMainSpace;
+
     Vector3 controlCubeLocation;
 
     //Adding the highlight as disabled to begin with
@@ -50,6 +52,7 @@ public class DesignSpace: MonoBehaviour
             constraintList.Add(child.gameObject);
         }
 
+        isMainSpace = false;
     }
 
 
@@ -125,11 +128,15 @@ public class DesignSpace: MonoBehaviour
             voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", controlCube.transform.localPosition.z);
         }
 
+        //Update the view of the objects in the world if it's the main space
+        //Only call this if the parent is the main design space
+
+
+
     }
 
     public void Animate()
-    {
-
+    { 
         //Move the voxels that have reached their location into the main list
         for (int i = 0; i < voxels.Count; i++) {
             Transform child = voxels[i];
@@ -210,20 +217,25 @@ public class DesignSpace: MonoBehaviour
                 AddToDesignSpace(selection);
 
                 //highlight the selected object in white
-                var whiteOutline = selection.AddComponent<Outline>();
-                whiteOutline.OutlineMode = Outline.Mode.OutlineAll;
-                whiteOutline.OutlineColor = Color.white;
-                whiteOutline.OutlineWidth = 5f;
+                if (!selection.GetComponent<Outline>())
+                {
+                    var whiteOutline = selection.AddComponent<Outline>();
+                    whiteOutline.OutlineMode = Outline.Mode.OutlineAll;
+                    whiteOutline.OutlineColor = Color.white;
+                    whiteOutline.OutlineWidth = 5f;
+                }
             }
             else {
                 AddVoxelsToDesignSpace(selection);
 
-                //highlight the selected object in yellow
-                var yellowOutline = selection.AddComponent<Outline>();
-                yellowOutline.OutlineMode = Outline.Mode.OutlineAll;
-                yellowOutline.OutlineColor = Color.yellow;
-                yellowOutline.OutlineWidth = 5f;
-
+                if (!selection.GetComponent<Outline>())
+                {
+                    //highlight the selected object in yellow
+                    var yellowOutline = selection.AddComponent<Outline>();
+                    yellowOutline.OutlineMode = Outline.Mode.OutlineAll;
+                    yellowOutline.OutlineColor = Color.yellow;
+                    yellowOutline.OutlineWidth = 5f;
+                }
             }
                 
 
@@ -268,6 +280,15 @@ public class DesignSpace: MonoBehaviour
 
     //Applies the deltas shown by the space to the objects in the real scene
     public void ApplyToWorld() {
-        //Loop through all the objects and 
+        //Loop through all the objects and apply the transformations based on where the object is in the design space
+        //for item in 
+
+
+    }
+
+    //Removes the deltas that are in the
+    public void UnapplyFromWorld() {
+
+
     }
 }

@@ -70,10 +70,8 @@ public class DesignSpaceManager : MonoBehaviour
             space.Animate();
         }
 
-        print(_DesignSpaceList.Count);
         if (OVRInput.GetDown(OVRInput.Button.Three, controller))
         {
-            
             if (main_index + 1 >= _DesignSpaceList.Count)
             {
                 //_DesignSpaceList[main_index].DisableOutline();
@@ -81,14 +79,20 @@ public class DesignSpaceManager : MonoBehaviour
                 //Change the parents of each object (the main space gets parented to the world and the other spaces get parented to the panel)
                 _DesignSpaceList[0].transform.parent = _DesignSpaceList[main_index].transform.parent;
                 _DesignSpaceList[main_index].transform.parent = panelParent.transform;
+                _DesignSpaceList[main_index].isMainSpace = false;
+
                 main_index = 0;
+                _DesignSpaceList[main_index].isMainSpace = true;
                 _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
             else {
                 _DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 _DesignSpaceList[main_index+1].transform.parent = _DesignSpaceList[main_index].transform.parent;
                 _DesignSpaceList[main_index].transform.parent = panelParent.transform;
+                _DesignSpaceList[main_index].isMainSpace = false;
+
                 main_index += 1;
+                _DesignSpaceList[main_index].isMainSpace = true;
                 _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
         }
