@@ -5,7 +5,7 @@ using UnityEngine;
 public class DesignSpaceCreator : MonoBehaviour
 {
     public OVRInput.Controller controller;
-
+    public GameObject panel;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,8 +19,9 @@ public class DesignSpaceCreator : MonoBehaviour
             Vector3 offset = new Vector3(0.1f, 0.0f, 0.1f);
             DesignSpace mainDesignSpace = DesignSpaceManager.instance.GetMainDesignSpace();
             GameObject designSpaceAxes = mainDesignSpace.gameObject;
-            GameObject clonedDesignSpaceAxes = Instantiate(designSpaceAxes, designSpaceAxes.transform.localPosition + offset, designSpaceAxes.transform.localRotation) as GameObject;
-            clonedDesignSpaceAxes.transform.parent = designSpaceAxes.transform.parent;
+            GameObject clonedDesignSpaceAxes = Instantiate(designSpaceAxes, panel.transform.position, designSpaceAxes.transform.rotation) as GameObject;
+            //parent the cloned design space to the panel temporarily
+            clonedDesignSpaceAxes.transform.parent = panel.transform.parent;
 
             DesignSpace clonedDesignSpace = new DesignSpace();
             clonedDesignSpace.x_attr = mainDesignSpace.x_attr;

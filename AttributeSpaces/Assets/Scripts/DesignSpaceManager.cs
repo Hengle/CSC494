@@ -17,6 +17,7 @@ public class DesignSpaceManager : MonoBehaviour
     static List<DesignSpace> _DesignSpaceList;
     public int main_index;
 
+    public GameObject panelParent;
     /*
      * This class has the master list of design spaces
      * 
@@ -77,11 +78,16 @@ public class DesignSpaceManager : MonoBehaviour
             {
                 //_DesignSpaceList[main_index].DisableOutline();
                 _DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                //Change the parents of each object (the main space gets parented to the world and the other spaces get parented to the panel)
+                _DesignSpaceList[0].transform.parent = _DesignSpaceList[main_index].transform.parent;
+                _DesignSpaceList[main_index].transform.parent = panelParent.transform;
                 main_index = 0;
                 _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
             else {
                 _DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                _DesignSpaceList[main_index+1].transform.parent = _DesignSpaceList[main_index].transform.parent;
+                _DesignSpaceList[main_index].transform.parent = panelParent.transform;
                 main_index += 1;
                 _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
