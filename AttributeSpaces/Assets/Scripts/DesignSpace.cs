@@ -16,13 +16,14 @@ public class DesignSpace: MonoBehaviour
     public List<GameObject> voxelOriginals;
 
     float speed;
-    List<Transform> voxels = new List<Transform>();
+    
     List<Vector3> colors = new List<Vector3>();
 
     public GameObject magnetParent;
     public GameObject constraintParent;
 
-    public List<GameObject> proxyList = new List<GameObject>();
+    List<Transform> voxels = new List<Transform>();
+    public List<Proxy> proxyList = new List<Proxy>();
     List<GameObject> magnetList = new List<GameObject>();
     List<GameObject> constraintList = new List<GameObject>();
 
@@ -30,6 +31,7 @@ public class DesignSpace: MonoBehaviour
 
     Vector3 controlCubeLocation;
 
+    public GameObject originCube;
     //Adding the highlight as disabled to begin with
     //Outline outline;
 
@@ -41,7 +43,11 @@ public class DesignSpace: MonoBehaviour
         controlCubeLocation = controlCube.transform.position;
 
         //Set it to be tiny by default
-        transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        //transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        if (originCube.transform.GetComponent<MeshRenderer>())
+        {
+            originCube.transform.GetComponent<MeshRenderer>().material.color = Color.white;
+        }
 
         //Add all the magnets and constraints to the list
         foreach (Transform child in magnetParent.transform) {
@@ -143,16 +149,15 @@ public class DesignSpace: MonoBehaviour
             if (Vector3.Distance(child.localPosition, colors[i]) < 0.00001)
             {
                 child.localPosition = colors[i];
-                proxyList.Add(child.gameObject);
+                child.gameObject.AddComponent<Proxy>();
+                child.gameObject.GetComponent<Proxy>().original = voxelOriginals[i];
+                proxyList.Add(child.GetComponent<Proxy>());
                 voxels.RemoveAt(i);
                 colors.RemoveAt(i);
             }
         }
         for (int i = 0; i < voxels.Count; i++){
             Transform child = voxels[i];
-
-            if (proxyList.Contains(child.gameObject) == false)
-            {
                 speed = 0.1f;
 
                 Vector3 colorLocation = colors[i];
@@ -170,7 +175,6 @@ public class DesignSpace: MonoBehaviour
                 float t = Mathf.Clamp(Mathf.Exp(-5 * dist), 0.05f, 0.2f);
                 child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
                 child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
-            }
         }
 
         //Move things in _gameObjectList
@@ -253,7 +257,7 @@ public class DesignSpace: MonoBehaviour
         proxySphere.transform.parent = this.transform;
         //proxySphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
 
-        proxyList.Add(proxySphere);
+        proxyList.Add(proxySphere.GetComponent<Proxy>());
     }
 
     //Creates a voxelized version of the object then animates it into the current design space box
@@ -278,17 +282,45 @@ public class DesignSpace: MonoBehaviour
         }
     }
 
+    public void SetGlobalScale(Transform objTransform, Vector3 globalScale)
+    {
+        //Setting to 1 negates the effects of the parent's transforms
+        objTransform.localScale = Vector3.one;
+        //lossyscale is global scale
+        objTransform.localScale = new Vector3(globalScale.x / Mathf.Max(Mathf.Abs(objTransform.lossyScale.x), 0.000001f),
+                                            globalScale.y / Mathf.Max(Mathf.Abs(objTransform.lossyScale.y), 0.000001f),
+                                            globalScale.z / Mathf.Max(Mathf.Abs(objTransform.lossyScale.z), 0.000001f));
+    }
+
     //Applies the deltas shown by the space to the objects in the real scene
     public void ApplyToWorld() {
         //Loop through all the objects and apply the transformations based on where the object is in the design space
-        //for item in 
+        //For all of the proxies in this space, look at their position 
+        //and apply the transformations to the originals in the world
+        
+        Vector3 proxylocation;
 
+        for (int i = 0; i < proxyList.Count; i++) {
 
+            proxylocation = proxyList[i].gameObject.transform.localPosition;
+
+            proxyList[i].original.transform.localScale = proxyList[i].original.transform.localScale + (proxyList[i].transform.localPosition - proxyList[i].originalLocation);
+
+        }
+        
     }
 
-    //Removes the deltas that are in the
+
     public void UnapplyFromWorld() {
+        
+        //For all of the proxies in this space, look at their position 
+        //and apply the inverse of the transformations to the originals in the world
+        Vector3 proxylocation;
 
+        for (int i = 0; i < proxyList.Count; i++) {
 
+            proxyList[i].original.transform.localScale = proxyList[i].original.transform.localScale - (proxyList[i].transform.localPosition-proxyList[i].originalLocation);
+        }
+        
     }
 }

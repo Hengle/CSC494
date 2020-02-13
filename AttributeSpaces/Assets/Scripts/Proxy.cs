@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Utilities;
 
 public class Proxy : MonoBehaviour
 {
@@ -12,10 +13,15 @@ public class Proxy : MonoBehaviour
     Transform parent;
 
     //Store the position so that it can be updated every frame??
-    Vector3 past_position;
+    public Vector3 past_position;
+
+    //Store the initial scale
+    public Vector3 originalScale;
+    public Vector3 originalLocation;
 
     void Start()
     {
+        originalScale = original.transform.localScale;
         grabbable = GetComponent<OVRGrabbable>();
         if (GetComponent<MeshRenderer>() && original.GetComponent<MeshRenderer>())
         {
@@ -29,10 +35,27 @@ public class Proxy : MonoBehaviour
             //transform.localPosition = original.transform.localScale;
 
             transform.localPosition = original.GetComponent<MeshRenderer>().bounds.size;
+            originalLocation = transform.localPosition;
             transform.localScale = original.transform.localScale;
             transform.localRotation = original.transform.localRotation;
             past_position = transform.localPosition;
         }
+
+        //Set up how the proxy should look at the very beginning
+        //---------------------
+        //0.5 is hardcoded so that the representations aren't too big
+        SetGlobalScale(original.transform.localScale * 0.1f);
+
+        Vector3 pos = parent.InverseTransformPoint(transform.position);
+
+        //OR store the delta of the bounding box transform and change the original object by the same amount
+        Vector3 newPos = transform.localPosition - past_position;
+        original.transform.localScale += newPos;
+
+        //Store the delta for how much it's moving and then use that to change the size
+        //This is to avoid having the bounding box mess up the scale of the final object
+        past_position = transform.localPosition;
+        //------
     }
     public void SetGlobalScale(Vector3 globalScale)
     {
@@ -45,7 +68,7 @@ public class Proxy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Basically animates the interaction
         //Only call this if the parent is the main design space
         if (DesignSpaceManager.instance.GetMainDesignSpace().transform == this.parent.transform) {
             //0.5 is hardcoded so that the representations aren't too big
@@ -61,5 +84,6 @@ public class Proxy : MonoBehaviour
             //This is to avoid having the bounding box mess up the scale of the final object
             past_position = transform.localPosition;
         }
+
     }
 }

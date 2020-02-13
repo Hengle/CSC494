@@ -63,7 +63,11 @@ public class DesignSpaceManager : MonoBehaviour
         //enable in case it isn't already
         if (_DesignSpaceList[main_index])
         {
-            _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            //_DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            if (_DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>())
+            {
+                _DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>().material.color = Color.black;
+            }
         }
         
         foreach (DesignSpace space in _DesignSpaceList) { 
@@ -72,29 +76,38 @@ public class DesignSpaceManager : MonoBehaviour
 
         if (OVRInput.GetDown(OVRInput.Button.Three, controller))
         {
+            int new_index;
             if (main_index + 1 >= _DesignSpaceList.Count)
             {
-                //_DesignSpaceList[main_index].DisableOutline();
-                _DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                //Change the parents of each object (the main space gets parented to the world and the other spaces get parented to the panel)
-                _DesignSpaceList[0].transform.parent = _DesignSpaceList[main_index].transform.parent;
-                _DesignSpaceList[main_index].transform.parent = panelParent.transform;
-                _DesignSpaceList[main_index].isMainSpace = false;
-
-                main_index = 0;
-                _DesignSpaceList[main_index].isMainSpace = true;
-                _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                new_index = 0;
             }
             else {
-                _DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                _DesignSpaceList[main_index+1].transform.parent = _DesignSpaceList[main_index].transform.parent;
-                _DesignSpaceList[main_index].transform.parent = panelParent.transform;
+                new_index = main_index + 1;
+            }
+
+            //Don't do anything if there is only 1 space
+            if (main_index != new_index)
+            {
+                _DesignSpaceList[main_index].UnapplyFromWorld();
+                //_DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                if (_DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>())
+                {
+                    _DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>().material.color = Color.white;
+                }
+
                 _DesignSpaceList[main_index].isMainSpace = false;
 
-                main_index += 1;
+                main_index = new_index;
+
                 _DesignSpaceList[main_index].isMainSpace = true;
-                _DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                //_DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                if (_DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>())
+                {
+                    _DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>().material.color = Color.black;
+                }
+                _DesignSpaceList[main_index].ApplyToWorld();
             }
+
         }
 
 

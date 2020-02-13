@@ -16,23 +16,8 @@ public class DesignSpaceCreator : MonoBehaviour
     void Update()
     {
         if (OVRInput.GetDown(OVRInput.Button.Four, controller)) {
-            Vector3 offset = new Vector3(0.1f, 0.0f, 0.1f);
             DesignSpace mainDesignSpace = DesignSpaceManager.instance.GetMainDesignSpace();
-            GameObject designSpaceAxes = mainDesignSpace.gameObject;
-            GameObject clonedDesignSpaceAxes = Instantiate(designSpaceAxes, panel.transform.position, designSpaceAxes.transform.rotation) as GameObject;
-            //parent the cloned design space to the panel temporarily
-            clonedDesignSpaceAxes.transform.parent = panel.transform.parent;
-
-            DesignSpace clonedDesignSpace = new DesignSpace();
-            clonedDesignSpace.x_attr = mainDesignSpace.x_attr;
-            clonedDesignSpace.y_attr = mainDesignSpace.y_attr;
-            clonedDesignSpace.z_attr = mainDesignSpace.z_attr;
-            clonedDesignSpace._gameObjectList = mainDesignSpace._gameObjectList;
-            clonedDesignSpace.proxyPrefab = mainDesignSpace.proxyPrefab;
-
-            //Now Add this design space axis to the list of design spaces
-            //DesignSpaceManager.instance.AddDesignSpaceToList(clonedDesignSpace);
-
+            DesignSpace clonedDesignSpaceAxes = Instantiate(mainDesignSpace, panel.transform.position, mainDesignSpace.transform.rotation, mainDesignSpace.transform.parent) as DesignSpace;
         }
     }
 }
