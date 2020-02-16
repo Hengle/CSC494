@@ -40,7 +40,6 @@ public class AxisSnapper : MonoBehaviour
             slider.transform.localPosition = originalPosition;
             slider.transform.localRotation = originalRotation;
 
-            print("!!!!" + originalRotation.x + "!!!!" + originalRotation.y + "!!!!" + originalRotation.z);
             //Now tell the parent which axis was updated
             if (axisOrdering == 0){
                 Axes.UpdateXAxis(slider.GetComponent<Axis>());
@@ -64,6 +63,19 @@ public class AxisSnapper : MonoBehaviour
 
         if (slider)
         {
+            if (axisOrdering == 0)
+            {
+                Axes.RemoveXAxis(slider.GetComponent<Axis>());
+            }
+            else if (axisOrdering == 1)
+            {
+                Axes.RemoveYAxis(slider.GetComponent<Axis>());
+            }
+            else if (axisOrdering == 2)
+            {
+                Axes.RemoveZAxis(slider.GetComponent<Axis>());
+            }
+
             //grabHand.ForceRelease(slider.grabObject);
             collider.gameObject.GetComponent<AxisConnector>().sliderObject.transform.SetParent(axisParent.parent.parent);
         }

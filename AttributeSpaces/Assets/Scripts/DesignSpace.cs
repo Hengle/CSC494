@@ -8,12 +8,14 @@ public class DesignSpace: MonoBehaviour
     public Axis x_attr;
     public Axis y_attr;
     public Axis z_attr;
+    public GameObject spaceBox;
     //The axis contains the xyz axes and also the different proxy points as children 
     public List<GameObject> _gameObjectList;
     public GameObject proxyPrefab;
     public OVRGrabbable controlCube;
     //List of the objects that were used to make each voxel (same length as the voxels)
     public List<GameObject> voxelOriginals;
+    
 
     float speed;
     
@@ -273,9 +275,11 @@ public class DesignSpace: MonoBehaviour
         proxySphere.GetComponent<Proxy>().original = selection;
 
         proxySphere.transform.parent = this.transform;
+        Proxy newProxy = proxySphere.GetComponent<Proxy>();
+        newProxy.parentSpace = this;
         //proxySphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
 
-        proxyList.Add(proxySphere.GetComponent<Proxy>());
+        proxyList.Add(newProxy);
     }
 
     //Creates a voxelized version of the object then animates it into the current design space box
@@ -341,5 +345,31 @@ public class DesignSpace: MonoBehaviour
 
         }
         
+    }
+
+    public void UpdateLocations() {
+        for (int i = 0; i < proxyList.Count; i++)
+        {
+            Vector3 bounds = proxyList[i].originalLocation;
+
+            //Only show the distribution along axes that exist
+            Vector3 location = new Vector3(0, 0, 0);
+            if (x_attr)
+            {
+                location = location.SetX(bounds.x);
+            }
+            if (y_attr)
+            {
+                location = location.SetY(bounds.y);
+            }
+            if (z_attr)
+            {
+                location = location.SetZ(bounds.z);
+            }
+            proxyList[i].transform.localPosition = location;
+
+        }
+
+
     }
 }

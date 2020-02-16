@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities;
 
 public class AxisManager : MonoBehaviour
 {
@@ -25,15 +26,45 @@ public class AxisManager : MonoBehaviour
     {
         x_axis = X;
         DS.x_attr = X;
+        DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetX(1.0f);
+        DS.UpdateLocations();
+        //TODO update where the objects are in the space
     }
     public void UpdateYAxis(Axis Y)
     {
         y_axis = Y;
         DS.y_attr = Y;
+        DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetY(1.0f);
+        DS.UpdateLocations();
     }
     public void UpdateZAxis(Axis Z)
     {
         z_axis = Z;
         DS.z_attr = Z;
+        DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetZ(1.0f);
+        DS.UpdateLocations();
+    }
+
+    public void RemoveXAxis(Axis X)
+    {
+        x_axis = null;
+        DS.x_attr = null;
+        DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetX(0.1f);
+        DS.UpdateLocations();
+        //TODO update where the objects are in the space
+    }
+    public void RemoveYAxis(Axis Y)
+    {
+        y_axis = null;
+        DS.y_attr = null;
+        DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetY(0.1f);
+        DS.UpdateLocations();
+    }
+    public void RemoveZAxis(Axis Z)
+    {
+        z_axis = null;
+        DS.z_attr = null;
+        DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetZ(0.1f);
+        DS.UpdateLocations();
     }
 }

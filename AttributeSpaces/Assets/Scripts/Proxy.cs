@@ -12,6 +12,7 @@ public class Proxy : MonoBehaviour
     OVRGrabbable grabbable;
     Transform parent;
 
+    public DesignSpace parentSpace;
     //Store the position so that it can be updated every frame??
     public Vector3 past_position;
 
@@ -34,8 +35,25 @@ public class Proxy : MonoBehaviour
             //Change this to use the bounding box instead of the local scale!!! Not sure how to get a rotation-invariant bounding box though
             //transform.localPosition = original.transform.localScale;
 
-            transform.localPosition = original.GetComponent<MeshRenderer>().bounds.size;
-            originalLocation = transform.localPosition;
+            Vector3 bounds = original.GetComponent<MeshRenderer>().bounds.size;
+
+            //Only show the distribution along axes that exist
+            Vector3 location = new Vector3(0, 0, 0);
+            if (parentSpace.x_attr) {
+                location = location.SetX(bounds.x);
+            }
+            if (parentSpace.y_attr)
+            {
+                location = location.SetY(bounds.y);
+            }
+            if (parentSpace.z_attr)
+            {
+                location = location.SetZ(bounds.z);
+            }
+            transform.localPosition = location;
+            originalLocation = bounds;
+
+
             transform.localScale = original.transform.localScale;
             transform.localRotation = original.transform.localRotation;
             past_position = transform.localPosition;
