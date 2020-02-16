@@ -88,7 +88,7 @@ public class DesignSpaceManager : MonoBehaviour
             //Don't do anything if there is only 1 space
             if (main_index != new_index)
             {
-                _DesignSpaceList[main_index].UnapplyFromWorld();
+                
                 //_DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 if (_DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>())
                 {
@@ -96,6 +96,7 @@ public class DesignSpaceManager : MonoBehaviour
                 }
 
                 _DesignSpaceList[main_index].isMainSpace = false;
+                _DesignSpaceList[main_index].UnapplyFromWorld();
 
                 main_index = new_index;
 

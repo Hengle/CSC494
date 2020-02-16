@@ -5,7 +5,7 @@ using Utilities;
 
 public class DesignSpace: MonoBehaviour
 {
-    public RangeSlider x_attr;
+    public Axis x_attr;
     public RangeSlider y_attr;
     public RangeSlider z_attr;
     //The axis contains the xyz axes and also the different proxy points as children 
@@ -72,7 +72,7 @@ public class DesignSpace: MonoBehaviour
         if (controlCube.isGrabbed)
         {
 
-            x_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
+            x_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
             x_attr.UpdateMax();
 
             y_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
@@ -82,12 +82,12 @@ public class DesignSpace: MonoBehaviour
             z_attr.UpdateMax();
 
         }
-        else if (x_attr.maxGrabbable.isGrabbed || y_attr.maxGrabbable.isGrabbed || z_attr.maxGrabbable.isGrabbed)
+        else if (x_attr.controlGrabbable.isGrabbed || y_attr.maxGrabbable.isGrabbed || z_attr.maxGrabbable.isGrabbed)
         {
-            controlCube.transform.localPosition = new Vector3(x_attr.maxValue, y_attr.maxValue, z_attr.maxValue);
+            controlCube.transform.localPosition = new Vector3(x_attr.currentValue, y_attr.maxValue, z_attr.maxValue);
         }
         else { // default case is to update based on the cube location
-            x_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
+            x_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
             x_attr.UpdateMax();
 
             y_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
@@ -113,7 +113,7 @@ public class DesignSpace: MonoBehaviour
 
 
         }
-        else if ((x_attr.maxGrabbable.isGrabbed || y_attr.maxGrabbable.isGrabbed || z_attr.maxGrabbable.isGrabbed))
+        else if ((x_attr.controlGrabbable.isGrabbed || y_attr.maxGrabbable.isGrabbed || z_attr.maxGrabbable.isGrabbed))
         {
             //Update the location of the objects based on where the controller is now (if it updated)
             for (int i = 0; i < proxyList.Count; i++)
@@ -320,6 +320,7 @@ public class DesignSpace: MonoBehaviour
         for (int i = 0; i < proxyList.Count; i++) {
 
             proxyList[i].original.transform.localScale = proxyList[i].original.transform.localScale - (proxyList[i].transform.localPosition-proxyList[i].originalLocation);
+
         }
         
     }

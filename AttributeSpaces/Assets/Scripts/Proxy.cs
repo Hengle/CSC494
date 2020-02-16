@@ -43,18 +43,8 @@ public class Proxy : MonoBehaviour
 
         //Set up how the proxy should look at the very beginning
         //---------------------
-        //0.5 is hardcoded so that the representations aren't too big
+        //0.1 is hardcoded so that the representations aren't too big
         SetGlobalScale(original.transform.localScale * 0.1f);
-
-        Vector3 pos = parent.InverseTransformPoint(transform.position);
-
-        //OR store the delta of the bounding box transform and change the original object by the same amount
-        Vector3 newPos = transform.localPosition - past_position;
-        original.transform.localScale += newPos;
-
-        //Store the delta for how much it's moving and then use that to change the size
-        //This is to avoid having the bounding box mess up the scale of the final object
-        past_position = transform.localPosition;
         //------
     }
     public void SetGlobalScale(Vector3 globalScale)

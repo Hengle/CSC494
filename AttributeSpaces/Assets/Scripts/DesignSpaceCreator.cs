@@ -17,7 +17,8 @@ public class DesignSpaceCreator : MonoBehaviour
     {
         if (OVRInput.GetDown(OVRInput.Button.Four, controller)) {
             DesignSpace mainDesignSpace = DesignSpaceManager.instance.GetMainDesignSpace();
-            DesignSpace clonedDesignSpaceAxes = Instantiate(mainDesignSpace, panel.transform.position, mainDesignSpace.transform.rotation, mainDesignSpace.transform.parent) as DesignSpace;
+            Vector3 newLocation = panel.transform.position + new Vector3(0f, 0.05f, 0f);
+            DesignSpace clonedDesignSpaceAxes = Instantiate(mainDesignSpace, newLocation, mainDesignSpace.transform.rotation, mainDesignSpace.transform.parent) as DesignSpace;
         }
     }
 }
