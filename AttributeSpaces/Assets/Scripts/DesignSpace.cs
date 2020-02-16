@@ -6,8 +6,8 @@ using Utilities;
 public class DesignSpace: MonoBehaviour
 {
     public Axis x_attr;
-    public RangeSlider y_attr;
-    public RangeSlider z_attr;
+    public Axis y_attr;
+    public Axis z_attr;
     //The axis contains the xyz axes and also the different proxy points as children 
     public List<GameObject> _gameObjectList;
     public GameObject proxyPrefab;
@@ -67,37 +67,55 @@ public class DesignSpace: MonoBehaviour
     {
         //Update the slider location based on where the box is (but only the one component that changed)                            
         //The range for the slider goes from -0.5 to 0.5 so you need to add an offset
-
-
         if (controlCube.isGrabbed)
         {
-
-            x_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
-            x_attr.UpdateMax();
-
-            y_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
-            y_attr.UpdateMax();
-
-            z_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.z - 0.5f, 0f, 0f);
-            z_attr.UpdateMax();
-
+            if (x_attr)
+            {
+                x_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
+                x_attr.UpdateMax();
+            }
+            if (y_attr) {
+                y_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
+                y_attr.UpdateMax();
+            }
+            if (z_attr) {
+                z_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.z - 0.5f, 0f, 0f);
+                z_attr.UpdateMax();
+            }
         }
-        else if (x_attr.controlGrabbable.isGrabbed || y_attr.maxGrabbable.isGrabbed || z_attr.maxGrabbable.isGrabbed)
+        if ((x_attr && x_attr.controlGrabbable.isGrabbed) || (y_attr && y_attr.controlGrabbable.isGrabbed) || (z_attr && z_attr.controlGrabbable.isGrabbed))
         {
-            controlCube.transform.localPosition = new Vector3(x_attr.currentValue, y_attr.maxValue, z_attr.maxValue);
+            if (x_attr)
+            {
+                controlCube.transform.localPosition = controlCube.transform.localPosition.SetX(x_attr.currentValue);
+            }
+            if (y_attr)
+            {
+                controlCube.transform.localPosition = controlCube.transform.localPosition.SetY(y_attr.currentValue);
+            }
+            if (z_attr)
+            {
+                controlCube.transform.localPosition = controlCube.transform.localPosition.SetZ(z_attr.currentValue);
+            }
         }
         else { // default case is to update based on the cube location
-            x_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
-            x_attr.UpdateMax();
 
-            y_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
-            y_attr.UpdateMax();
-
-            z_attr.maxGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.z - 0.5f, 0f, 0f);
-            z_attr.UpdateMax();
+            if (x_attr)
+            {
+                x_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
+                x_attr.UpdateMax();
+            }
+            if (y_attr)
+            {
+                y_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.y - 0.5f, 0f, 0f);
+                y_attr.UpdateMax();
+            }
+            if (z_attr)
+            {
+                z_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.z - 0.5f, 0f, 0f);
+                z_attr.UpdateMax();
+            }
         }
-
-
 
 
         if ((controlCube.isGrabbed) && (controlCubeLocation != controlCube.transform.position))
@@ -113,7 +131,7 @@ public class DesignSpace: MonoBehaviour
 
 
         }
-        else if ((x_attr.controlGrabbable.isGrabbed || y_attr.maxGrabbable.isGrabbed || z_attr.maxGrabbable.isGrabbed))
+        else if ((x_attr && x_attr.controlGrabbable.isGrabbed) || (y_attr && y_attr.controlGrabbable.isGrabbed) || (z_attr && z_attr.controlGrabbable.isGrabbed))
         {
             //Update the location of the objects based on where the controller is now (if it updated)
             for (int i = 0; i < proxyList.Count; i++)
