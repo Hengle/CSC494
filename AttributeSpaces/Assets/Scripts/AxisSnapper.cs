@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities;
 
 public class AxisSnapper : MonoBehaviour
 {
@@ -36,9 +37,13 @@ public class AxisSnapper : MonoBehaviour
             grabHand.ForceRelease(axisConnector.grabObject);
             //Reparent it to the axes collection
             slider.transform.SetParent(axisParent);
+            
             //Snap it to the right position
-            slider.transform.localPosition = originalPosition;
-            slider.transform.localRotation = originalRotation;
+            //slider.transform.localPosition = originalPosition;
+            //slider.transform.localRotation = originalRotation;
+            //Slowly have the object float to the right position
+            slider.transform.AnimateLocalPosition(originalPosition);
+            slider.transform.AnimateLocalRotation(originalRotation);
 
             //Now tell the parent which axis was updated
             if (axisOrdering == 0){
