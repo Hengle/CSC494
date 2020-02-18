@@ -47,14 +47,17 @@ public class AxisSnapper : MonoBehaviour
 
             //Now tell the parent which axis was updated
             if (axisOrdering == 0){
+                slider.GetComponent<Axis>().orientation = 0;
                 Axes.UpdateXAxis(slider.GetComponent<Axis>());
                 print("It was X");
             }
             else if (axisOrdering == 1){
+                slider.GetComponent<Axis>().orientation = 1;
                 Axes.UpdateYAxis(slider.GetComponent<Axis>());
                 print("It was Y");
             }
             else if (axisOrdering == 2) {
+                slider.GetComponent<Axis>().orientation = 2;
                 Axes.UpdateZAxis(slider.GetComponent<Axis>());
                 print("It was Z");
             }

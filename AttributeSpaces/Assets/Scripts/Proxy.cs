@@ -9,6 +9,9 @@ public class Proxy : MonoBehaviour
     // Start is called before the first frame update
     public GameObject original; // Fish
 
+    //Back up the true original of the object
+    [NonSerialized] public GameObject original_backup; 
+
     OVRGrabbable grabbable;
     Transform parent;
 
@@ -16,13 +19,15 @@ public class Proxy : MonoBehaviour
     //Store the position so that it can be updated every frame??
     public Vector3 past_position;
 
-    //Store the initial scale
-    public Vector3 originalScale;
+    //Store the initial location of the proxy
     public Vector3 originalLocation;
 
     void Start()
     {
-        originalScale = original.transform.localScale;
+        //Save the original object so that you can go back to it, but disable the copy so that it doesn't show
+        original_backup = Instantiate(original, original.transform.position, original.transform.rotation);
+        original_backup.SetActive(false);
+
         grabbable = GetComponent<OVRGrabbable>();
         if (GetComponent<MeshRenderer>() && original.GetComponent<MeshRenderer>())
         {
@@ -30,35 +35,10 @@ public class Proxy : MonoBehaviour
             GetComponent<MeshFilter>().mesh = original.GetComponent<MeshFilter>().mesh;
             GetComponent<MeshCollider>().sharedMesh = original.GetComponent<MeshFilter>().mesh;
         }
-        parent = transform.parent;
-        if (original.GetComponent<MeshRenderer>()) { 
-            //Change this to use the bounding box instead of the local scale!!! Not sure how to get a rotation-invariant bounding box though
-            //transform.localPosition = original.transform.localScale;
 
-            Vector3 bounds = original.GetComponent<MeshRenderer>().bounds.size;
-
-            //Only show the distribution along axes that exist
-            Vector3 location = new Vector3(0, 0, 0);
-            if (parentSpace.x_attr) {
-                location = location.SetX(bounds.x);
-            }
-            if (parentSpace.y_attr)
-            {
-                location = location.SetY(bounds.y);
-            }
-            if (parentSpace.z_attr)
-            {
-                location = location.SetZ(bounds.z);
-            }
-            transform.localPosition = location;
-            originalLocation = bounds;
-
-
-            transform.localScale = original.transform.localScale;
-            transform.localRotation = original.transform.localRotation;
-            past_position = transform.localPosition;
-        }
-
+        transform.localRotation = original.transform.localRotation;
+        originalLocation = transform.localPosition;
+        past_position = transform.localPosition;
         //Set up how the proxy should look at the very beginning
         //---------------------
         //0.1 is hardcoded so that the representations aren't too big
@@ -74,19 +54,26 @@ public class Proxy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         //Basically animates the interaction
         //Only call this if the parent is the main design space
-        if (DesignSpaceManager.instance.GetMainDesignSpace().transform == this.parent.transform) {
-            //0.5 is hardcoded so that the representations aren't too big
+
+        if (DesignSpaceManager.instance.GetMainDesignSpace().transform == this.transform.parent) {
+            //0.1 is hardcoded so that the representations aren't too big
             SetGlobalScale(original.transform.localScale * 0.1f);
 
-            Vector3 pos = parent.InverseTransformPoint(transform.position);
+            Vector3 pos = transform.parent.InverseTransformPoint(transform.position);
 
             //OR store the delta of the bounding box transform and change the original object by the same amount
             Vector3 newPos = transform.localPosition - past_position;
-            original.transform.localScale += newPos;
+
+            //TODO you need to update the original object based on where the proxy is!!!
+            //original.transform.localScale += newPos;
+            if (parentSpace.x_attr) { parentSpace.x_attr.attribute.applyAttributeChange(this, parentSpace.x_attr, 0, original_backup.transform.localScale.x + parentSpace.x_attr.currentValue); }
+            if (parentSpace.y_attr) { parentSpace.y_attr.attribute.applyAttributeChange(this, parentSpace.y_attr, 1, original_backup.transform.localScale.y + parentSpace.y_attr.currentValue); }
+            if (parentSpace.z_attr) { parentSpace.z_attr.attribute.applyAttributeChange(this, parentSpace.z_attr, 2, original_backup.transform.localScale.z + parentSpace.z_attr.currentValue); }
+
 
             //Store the delta for how much it's moving and then use that to change the size
             //This is to avoid having the bounding box mess up the scale of the final object

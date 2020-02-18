@@ -47,8 +47,10 @@ public class DesignSpaceManager : MonoBehaviour
         main_index = 0;
 
     }
-    public void AddDesignSpaceToList(DesignSpace newSpace) {
+    public int AddDesignSpaceToList(DesignSpace newSpace) {
         _DesignSpaceList.Add(newSpace);
+        //Return the index of the newly added space
+        return _DesignSpaceList.Count -1;
     }
     // Start is called before the first frame update
     void Start()

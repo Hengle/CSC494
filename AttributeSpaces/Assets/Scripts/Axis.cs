@@ -20,17 +20,19 @@ public class Axis : MonoBehaviour
     [NonSerialized] public float maxValue = 1f;
 
     [RangeAttribute(0.0f, 1.0f)]
-    [NonSerialized] public float currentValue = 1f;
+    [NonSerialized] public float currentValue = 0f;
 
     HandController hand;
 
     public OnAxisUpdatedEvent OnAxisUpdated;
-
+       
     float min;
     float max;
-    float currentVal;
+
     //The attribute that this axis will change
-    Attribute attribute;
+    public Attribute attribute;
+
+    public int orientation;
 
     void Start()
     {
@@ -82,5 +84,4 @@ public class Axis : MonoBehaviour
         enabled = true;
         controlGrabbable.enabled = true;
     }
-
 }

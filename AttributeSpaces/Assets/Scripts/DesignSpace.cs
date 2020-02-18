@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 
-public class DesignSpace: MonoBehaviour
+public class DesignSpace : MonoBehaviour
 {
     public Axis x_attr;
     public Axis y_attr;
@@ -15,10 +15,10 @@ public class DesignSpace: MonoBehaviour
     public OVRGrabbable controlCube;
     //List of the objects that were used to make each voxel (same length as the voxels)
     public List<GameObject> voxelOriginals;
-    
+
 
     float speed;
-    
+
     List<Vector3> colors = new List<Vector3>();
 
     public GameObject magnetParent;
@@ -37,11 +37,13 @@ public class DesignSpace: MonoBehaviour
     //Adding the highlight as disabled to begin with
     //Outline outline;
 
+    public int DesignSpaceID;
     // Start is called before the first frame update
     private void Start()
     {
         //Add itself to the Design Space Manager's list of objects
-        DesignSpaceManager.instance.AddDesignSpaceToList(this);
+        DesignSpaceID = DesignSpaceManager.instance.AddDesignSpaceToList(this);
+
         controlCubeLocation = controlCube.transform.position;
 
         //Set it to be tiny by default
@@ -53,7 +55,7 @@ public class DesignSpace: MonoBehaviour
 
         //Add all the magnets and constraints to the list
         foreach (Transform child in magnetParent.transform) {
-            magnetList.Add(child.gameObject); 
+            magnetList.Add(child.gameObject);
         }
         foreach (Transform child in constraintParent.transform)
         {
@@ -148,21 +150,16 @@ public class DesignSpace: MonoBehaviour
         controlCubeLocation = controlCube.transform.position;
 
         //Update the colour of the mesh based on the control cube location
-        if(voxelOriginals.Count > 0) {
+        if (voxelOriginals.Count > 0) {
             voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaRed", controlCube.transform.localPosition.x);
             voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaGreen", controlCube.transform.localPosition.y);
             voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", controlCube.transform.localPosition.z);
         }
 
-        //Update the view of the objects in the world if it's the main space
-        //Only call this if the parent is the main design space
-
-
-
     }
 
     public void Animate()
-    { 
+    {
         //Move the voxels that have reached their location into the main list
         for (int i = 0; i < voxels.Count; i++) {
             Transform child = voxels[i];
@@ -176,25 +173,25 @@ public class DesignSpace: MonoBehaviour
                 colors.RemoveAt(i);
             }
         }
-        for (int i = 0; i < voxels.Count; i++){
+        for (int i = 0; i < voxels.Count; i++) {
             Transform child = voxels[i];
-                speed = 0.1f;
+            speed = 0.1f;
 
-                Vector3 colorLocation = colors[i];
-                Vector3 newlocation = Vector3.Lerp(child.localPosition, colorLocation, speed);
-                child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.9f, speed);
+            Vector3 colorLocation = colors[i];
+            Vector3 newlocation = Vector3.Lerp(child.localPosition, colorLocation, speed);
+            child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.9f, speed);
 
-                /*
-                    *Old version of the lerp that moves everything by the same speed
-                //lerp the position
-                child.localPosition = newlocation;
-                child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.5f, speed);
-                */
-                //Move each point a different amount based on the distance from the design space
-                float dist = Vector3.Distance(child.localPosition, colorLocation);
-                float t = Mathf.Clamp(Mathf.Exp(-5 * dist), 0.05f, 0.2f);
-                child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
-                child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
+            /*
+                *Old version of the lerp that moves everything by the same speed
+            //lerp the position
+            child.localPosition = newlocation;
+            child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.5f, speed);
+            */
+            //Move each point a different amount based on the distance from the design space
+            float dist = Vector3.Distance(child.localPosition, colorLocation);
+            float t = Mathf.Clamp(Mathf.Exp(-5 * dist), 0.05f, 0.2f);
+            child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
+            child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
         }
 
         //Move things in _gameObjectList
@@ -202,7 +199,7 @@ public class DesignSpace: MonoBehaviour
             //Check all the magnets
             for (int j = 0; j < magnetList.Count; j++) {
                 //If it intersects with the valid region of a magnet, move it
-                
+
                 Vector3 magnett = magnetList[j].transform.localPosition;
 
                 float distance = Vector3.Distance(magnetList[j].transform.localPosition, proxyList[i].transform.localPosition);
@@ -261,10 +258,10 @@ public class DesignSpace: MonoBehaviour
                     yellowOutline.OutlineWidth = 5f;
                 }
             }
-                
+
 
         }
-        
+
 
     }
 
@@ -275,7 +272,15 @@ public class DesignSpace: MonoBehaviour
         proxySphere.GetComponent<Proxy>().original = selection;
 
         proxySphere.transform.parent = this.transform;
+
+        //Get the proxy's original position using teh attributes that you have selected
+        float xComponent = x_attr ? x_attr.attribute.getCurrentValue(selection) : 0f;
+        float yComponent = y_attr ? y_attr.attribute.getCurrentValue(selection) : 0f;
+        float zComponent = z_attr ? z_attr.attribute.getCurrentValue(selection) : 0f;
+        proxySphere.transform.localPosition = new Vector3(xComponent, yComponent, zComponent);
+
         Proxy newProxy = proxySphere.GetComponent<Proxy>();
+
         newProxy.parentSpace = this;
         //proxySphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
 
@@ -304,6 +309,7 @@ public class DesignSpace: MonoBehaviour
         }
     }
 
+    /*
     public void SetGlobalScale(Transform objTransform, Vector3 globalScale)
     {
         //Setting to 1 negates the effects of the parent's transforms
@@ -313,63 +319,73 @@ public class DesignSpace: MonoBehaviour
                                             globalScale.y / Mathf.Max(Mathf.Abs(objTransform.lossyScale.y), 0.000001f),
                                             globalScale.z / Mathf.Max(Mathf.Abs(objTransform.lossyScale.z), 0.000001f));
     }
+    */
 
     //Applies the deltas shown by the space to the objects in the real scene
     public void ApplyToWorld() {
         //Loop through all the objects and apply the transformations based on where the object is in the design space
         //For all of the proxies in this space, look at their position 
         //and apply the transformations to the originals in the world
-        
+
         Vector3 proxylocation;
 
-        for (int i = 0; i < proxyList.Count; i++) {
+        for (int i = 0; i < proxyList.Count; i++)
+        {
 
             proxylocation = proxyList[i].gameObject.transform.localPosition;
 
-            proxyList[i].original.transform.localScale = proxyList[i].original.transform.localScale + (proxyList[i].transform.localPosition - proxyList[i].originalLocation);
-
+            //proxyList[i].original.transform.localScale = proxyList[i].original.transform.localScale + (proxyList[i].transform.localPosition - proxyList[i].originalLocation);
+            //set each of the axes of the update 
+            //x_attr.attribute.applyAttributeChange(proxy, x_attr, x location in design space);  This will apply the change in the world based on where the location is 
+            //Ths command below changes the original object
+            if (x_attr) { x_attr.attribute.applyAttributeChange(proxyList[i], x_attr, 0, proxyList[i].past_position.x + (proxyList[i].transform.localPosition.x - proxyList[i].past_position.x)); }
+            if (y_attr) { y_attr.attribute.applyAttributeChange(proxyList[i], y_attr, 1, proxyList[i].past_position.y + (proxyList[i].transform.localPosition.y - proxyList[i].past_position.y)); }
+            if (z_attr) { z_attr.attribute.applyAttributeChange(proxyList[i], z_attr, 2, proxyList[i].past_position.z + (proxyList[i].transform.localPosition.z - proxyList[i].past_position.z)); }
         }
-        
+
     }
 
 
     public void UnapplyFromWorld() {
-        
+
         //For all of the proxies in this space, look at their position 
         //and apply the inverse of the transformations to the originals in the world
         Vector3 proxylocation;
 
-        for (int i = 0; i < proxyList.Count; i++) {
+        for (int i = 0; i < proxyList.Count; i++)
+        {
 
-            proxyList[i].original.transform.localScale = proxyList[i].original.transform.localScale - (proxyList[i].transform.localPosition-proxyList[i].originalLocation);
-
+            //proxyList[i].original.transform.localScale = proxyList[i].original.transform.localScale - (proxyList[i].transform.localPosition-proxyList[i].originalLocation);
+            if (x_attr) { x_attr.attribute.applyAttributeChange(proxyList[i], x_attr, 0, proxyList[i].originalLocation.x); }
+            if (y_attr) { y_attr.attribute.applyAttributeChange(proxyList[i], y_attr, 1, proxyList[i].originalLocation.y); }
+            if (z_attr) { z_attr.attribute.applyAttributeChange(proxyList[i], z_attr, 2, proxyList[i].originalLocation.z); }
         }
-        
     }
 
+    //Update the location of the object after adding a new axis
     public void UpdateLocations() {
         for (int i = 0; i < proxyList.Count; i++)
         {
-            Vector3 bounds = proxyList[i].originalLocation;
-
             //Only show the distribution along axes that exist
             Vector3 location = new Vector3(0, 0, 0);
             if (x_attr)
             {
-                location = location.SetX(bounds.x);
+                //location = location.SetX(originalLoc.x);
+                location = location.SetX(x_attr.attribute.getCurrentValue(proxyList[i].original));
             }
             if (y_attr)
             {
-                location = location.SetY(bounds.y);
+                //location = location.SetY(originalLoc.y);
+                location = location.SetY(y_attr.attribute.getCurrentValue(proxyList[i].original));
             }
             if (z_attr)
             {
-                location = location.SetZ(bounds.z);
+                //location = location.SetZ(originalLoc.z);
+                location = location.SetZ(z_attr.attribute.getCurrentValue(proxyList[i].original));
             }
             proxyList[i].transform.localPosition = location;
 
         }
-
-
     }
+
 }

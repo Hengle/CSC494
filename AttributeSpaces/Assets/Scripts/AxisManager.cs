@@ -26,6 +26,7 @@ public class AxisManager : MonoBehaviour
     {
         x_axis = X;
         DS.x_attr = X;
+        //Expand the design space box to accomodate the new axis
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetX(1.0f);
         DS.UpdateLocations();
         //TODO update where the objects are in the space
@@ -34,6 +35,7 @@ public class AxisManager : MonoBehaviour
     {
         y_axis = Y;
         DS.y_attr = Y;
+        //Expand the design space box to accomodate the new axis
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetY(1.0f);
         DS.UpdateLocations();
     }
@@ -41,6 +43,7 @@ public class AxisManager : MonoBehaviour
     {
         z_axis = Z;
         DS.z_attr = Z;
+        //Expand the design space box to accomodate the new axis
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetZ(1.0f);
         DS.UpdateLocations();
     }
