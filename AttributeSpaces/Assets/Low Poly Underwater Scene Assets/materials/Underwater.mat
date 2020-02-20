@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Underwater
-  m_Shader: {fileID: 4800000, guid: 32260560f81d7fc47b3f2d7bc736f736, type: 3}
+  m_Shader: {fileID: 4800000, guid: e9a5349bf1d81684cb61a19ee9af3e91, type: 3}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
@@ -58,6 +58,9 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
+    - _DeltaBlue: 0
+    - _DeltaGreen: 0
+    - _DeltaRed: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1

@@ -13,18 +13,13 @@ public class DesignSpace : MonoBehaviour
     public List<GameObject> _gameObjectList;
     public GameObject proxyPrefab;
     public OVRGrabbable controlCube;
-    //List of the objects that were used to make each voxel (same length as the voxels)
-    public List<GameObject> voxelOriginals;
-
 
     float speed;
-
-    List<Vector3> colors = new List<Vector3>();
 
     public GameObject magnetParent;
     public GameObject constraintParent;
 
-    List<Transform> voxels = new List<Transform>();
+    List<Proxy> voxels = new List<Proxy>();
     public List<Proxy> proxyList = new List<Proxy>();
     List<GameObject> magnetList = new List<GameObject>();
     List<GameObject> constraintList = new List<GameObject>();
@@ -57,6 +52,7 @@ public class DesignSpace : MonoBehaviour
         foreach (Transform child in magnetParent.transform) {
             magnetList.Add(child.gameObject);
         }
+
         foreach (Transform child in constraintParent.transform)
         {
             constraintList.Add(child.gameObject);
@@ -150,11 +146,26 @@ public class DesignSpace : MonoBehaviour
         controlCubeLocation = controlCube.transform.position;
 
         //Update the colour of the mesh based on the control cube location
-        if (voxelOriginals.Count > 0) {
-            voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaRed", controlCube.transform.localPosition.x);
-            voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaGreen", controlCube.transform.localPosition.y);
-            voxelOriginals[0].GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", controlCube.transform.localPosition.z);
+        for (int i = 0; i<proxyList.Count; i++)
+        {
+
+            if (x_attr)
+            {
+                x_attr.attribute.applyAttributeChange(proxyList[i], x_attr, 0, controlCube.transform.localPosition.x);
+            }
+            else if (y_attr)
+            {
+                y_attr.attribute.applyAttributeChange(proxyList[i], y_attr, 1, controlCube.transform.localPosition.y);
+
+            }
+            else if (z_attr)
+            {
+                z_attr.attribute.applyAttributeChange(proxyList[i], z_attr, 2, controlCube.transform.localPosition.z);
+            }
+
         }
+        
+
 
     }
 
@@ -162,24 +173,33 @@ public class DesignSpace : MonoBehaviour
     {
         //Move the voxels that have reached their location into the main list
         for (int i = 0; i < voxels.Count; i++) {
-            Transform child = voxels[i];
-            if (Vector3.Distance(child.localPosition, colors[i]) < 0.00001)
+            Proxy child = voxels[i];
+            //Look at the distances between the original voxel and where it should be
+            float x_pos = x_attr ? x_attr.attribute.getCurrentValue(child.original, child): 0f;
+            float y_pos = y_attr ? y_attr.attribute.getCurrentValue(child.original, child): 0f;
+            float z_pos = z_attr ? z_attr.attribute.getCurrentValue(child.original, child): 0f;
+            float x_dist = x_attr ? x_pos - child.transform.localPosition.x: Mathf.Infinity;
+            float y_dist = y_attr ? y_pos - child.transform.localPosition.y : Mathf.Infinity;
+            float z_dist = z_attr ? z_pos - child.transform.localPosition.z : Mathf.Infinity;
+            if (x_dist + y_dist + z_dist < 0.000001f)
             {
-                child.localPosition = colors[i];
-                child.gameObject.AddComponent<Proxy>();
-                child.gameObject.GetComponent<Proxy>().original = voxelOriginals[i];
-                proxyList.Add(child.GetComponent<Proxy>());
+                child.transform.localPosition = new Vector3(x_pos, y_pos, z_pos);
+                proxyList.Add(child);
                 voxels.RemoveAt(i);
-                colors.RemoveAt(i);
             }
         }
         for (int i = 0; i < voxels.Count; i++) {
-            Transform child = voxels[i];
+            Proxy child = voxels[i];
             speed = 0.1f;
 
-            Vector3 colorLocation = colors[i];
-            Vector3 newlocation = Vector3.Lerp(child.localPosition, colorLocation, speed);
-            child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.9f, speed);
+            float x_pos = x_attr ? x_attr.attribute.getCurrentValue(child.original, child) : 0f;
+            float y_pos = y_attr ? y_attr.attribute.getCurrentValue(child.original, child) : 0f;
+            float z_pos = z_attr ? z_attr.attribute.getCurrentValue(child.original, child) : 0f;
+
+            Vector3 colorLocation = new Vector3(x_pos, y_pos, z_pos);
+            //colorLocation should be replaces by the value of the original object 
+            Vector3 newlocation = Vector3.Lerp(child.transform.localPosition, colorLocation, speed);
+            child.transform.localScale = Vector3.Lerp(child.transform.localScale, Vector3.one * 0.9f, speed);
 
             /*
                 *Old version of the lerp that moves everything by the same speed
@@ -188,10 +208,11 @@ public class DesignSpace : MonoBehaviour
             child.localScale = Vector3.Lerp(child.localScale, Vector3.one * 0.5f, speed);
             */
             //Move each point a different amount based on the distance from the design space
-            float dist = Vector3.Distance(child.localPosition, colorLocation);
+            float dist = Vector3.Distance(child.transform.localPosition, colorLocation);
+
             float t = Mathf.Clamp(Mathf.Exp(-5 * dist), 0.05f, 0.2f);
-            child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
-            child.localPosition = Vector3.Lerp(child.localPosition, colorLocation, t);
+            child.transform.localPosition = Vector3.Lerp(child.transform.localPosition, colorLocation, t);
+            child.transform.localPosition = Vector3.Lerp(child.transform.localPosition, colorLocation, t);
         }
 
         //Move things in _gameObjectList
@@ -294,18 +315,18 @@ public class DesignSpace : MonoBehaviour
 
         foreach (Transform child in voxel_parent.transform)
         {
-            voxelOriginals.Add(selection.GetComponentInChildren<Voxels>().originalObject);
-            voxels.Add(child);
-            Color color = child.GetComponent<MeshRenderer>().material.color;
-            float R = color.r;
-            float G = color.g;
-            float B = color.b;
-            colors.Add(new Vector3(R, G, B));
+            //create a proxy out of it and add it to child
+            child.gameObject.AddComponent<Proxy>();
+            child.gameObject.GetComponent<Proxy>().original = selection;
+            child.gameObject.GetComponent<Proxy>().parentSpace = this;
+            proxyList.Add(child.GetComponent<Proxy>());
+
+            voxels.Add(child.GetComponent<Proxy>());
         }
 
-        foreach (Transform child in voxels)
+        foreach (Proxy child in voxels)
         {
-            child.SetParent(this.transform);
+            child.transform.SetParent(this.transform);
         }
     }
 
@@ -371,17 +392,17 @@ public class DesignSpace : MonoBehaviour
             if (x_attr)
             {
                 //location = location.SetX(originalLoc.x);
-                location = location.SetX(x_attr.attribute.getCurrentValue(proxyList[i].original));
+                location = location.SetX(x_attr.attribute.getCurrentValue(proxyList[i].original, proxyList[i]));
             }
             if (y_attr)
             {
                 //location = location.SetY(originalLoc.y);
-                location = location.SetY(y_attr.attribute.getCurrentValue(proxyList[i].original));
+                location = location.SetY(y_attr.attribute.getCurrentValue(proxyList[i].original, proxyList[i]));
             }
             if (z_attr)
             {
                 //location = location.SetZ(originalLoc.z);
-                location = location.SetZ(z_attr.attribute.getCurrentValue(proxyList[i].original));
+                location = location.SetZ(z_attr.attribute.getCurrentValue(proxyList[i].original, proxyList[i]));
             }
             proxyList[i].transform.localPosition = location;
 

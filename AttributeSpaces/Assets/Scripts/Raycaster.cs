@@ -12,7 +12,6 @@ public class Raycaster : MonoBehaviour
     GameObject pointedAt = null;
 
     public LineRenderer rayVisual;
-   
 
     // Start is called before the first frame update
     void Start()
@@ -43,12 +42,15 @@ public class Raycaster : MonoBehaviour
     void StartRayCasting()
     {
         isRayCasting = true;
+        
         rayVisual.enabled = true;
+
     }
 
     void StopRayCasting()
     {
         isRayCasting = false;
+
         rayVisual.enabled = false;
 
         if (pointedAt != null)
@@ -68,19 +70,19 @@ public class Raycaster : MonoBehaviour
 
             //Make sure that you aren't hitting something in the axis. If it's in an axis, do not select
             //TODO change this to check ALL design spaces
-            if ((pointedAt.gameObject.transform.parent != DSManager.GetMainDesignSpace().gameObject.transform) && (pointedAt.gameObject.transform != DSManager.GetMainDesignSpace().gameObject.transform)){
+            if ((!pointedAt.GetComponent<Voxelizable>()) && (pointedAt.gameObject.transform.parent != DSManager.GetMainDesignSpace().gameObject.transform) && (pointedAt.gameObject.transform != DSManager.GetMainDesignSpace().gameObject.transform)){
                 DSManager.GetMainDesignSpace().SelectObject(pointedAt);
             }
 
             rayVisual.SetPosition(0, transform.position);
             rayVisual.SetPosition(1, hit.point);
 
-
         }
         else
         {
             rayVisual.SetPosition(0, transform.position);
             rayVisual.SetPosition(1, transform.position + transform.forward);
+
         }
     }
    

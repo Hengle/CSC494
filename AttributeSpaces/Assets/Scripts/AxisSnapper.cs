@@ -32,6 +32,9 @@ public class AxisSnapper : MonoBehaviour
 
         if (axisConnector)
         {
+            //TODO:
+            //Check that the axis is compatible with the objects and the rest of the axes
+
             GameObject slider = axisConnector.sliderObject;
             //Release it!!!
             grabHand.ForceRelease(axisConnector.grabObject);
@@ -49,17 +52,17 @@ public class AxisSnapper : MonoBehaviour
             if (axisOrdering == 0){
                 slider.GetComponent<Axis>().orientation = 0;
                 Axes.UpdateXAxis(slider.GetComponent<Axis>());
-                print("It was X");
+
             }
             else if (axisOrdering == 1){
                 slider.GetComponent<Axis>().orientation = 1;
                 Axes.UpdateYAxis(slider.GetComponent<Axis>());
-                print("It was Y");
+
             }
             else if (axisOrdering == 2) {
                 slider.GetComponent<Axis>().orientation = 2;
                 Axes.UpdateZAxis(slider.GetComponent<Axis>());
-                print("It was Z");
+
             }
         }
 
