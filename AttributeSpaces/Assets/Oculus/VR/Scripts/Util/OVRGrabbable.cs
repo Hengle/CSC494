@@ -135,6 +135,7 @@ public class OVRGrabbable : MonoBehaviour
 	/// </summary>
 	virtual public void GrabEnd(Vector3 linearVelocity, Vector3 angularVelocity)
     {
+
         OnReleased?.Invoke(linearVelocity, angularVelocity);
 
         Rigidbody rb = gameObject.GetComponent<Rigidbody>();
@@ -143,6 +144,7 @@ public class OVRGrabbable : MonoBehaviour
         rb.angularVelocity = angularVelocity;
         m_grabbedBy = null;
         m_grabbedCollider = null;
+        
     }
 
     void Awake()

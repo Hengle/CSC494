@@ -367,8 +367,10 @@ public class OVRGrabber : MonoBehaviour
 
     public void GrabbableRelease(Vector3 linearVelocity, Vector3 angularVelocity)
     {
-        m_grabbedObj.GrabEnd(linearVelocity, angularVelocity);
         if (m_parentHeldObject) m_grabbedObj.transform.parent = actualParent;
+        m_grabbedObj.GrabEnd(linearVelocity, angularVelocity);
+        
+        //The IF line used to be in this position
         m_grabbedObj = null;
     }
 

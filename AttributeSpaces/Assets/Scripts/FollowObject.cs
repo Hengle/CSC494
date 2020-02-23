@@ -35,14 +35,16 @@ public class FollowObject : MonoBehaviour
     Vector3 offset;
     void Start()
     {
-        offset = objToFollow.transform.position - transform.position;
+        //offset = objToFollow.transform.position - transform.position;
+        offset = new Vector3(0f, 0f, 0f);
     }
 
     // Update is called once per frame
     void Update()
     {
+        Vector3 pos = objToFollow.transform.position - new Vector3(0.0f, 0.5f, 0.3f);
         //Update with the delta between the movements
-        transform.position = objToFollow.transform.position - offset + new Vector3(5f, 0f, 0);
+        transform.position = pos;
         //Call SetColor using the shader property name "_Color" and setting the color to red
         //cubeRenderer.material.SetColor("_Color", new Vector4(point.GetComponent<Transform>().position.x * (float)5.0, point.GetComponent<Transform>().position.y * (float)5.0, point.GetComponent<Transform>().position.z * (float)5.0, (float)(1.0)));
     }

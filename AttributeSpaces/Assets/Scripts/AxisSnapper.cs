@@ -74,6 +74,7 @@ public class AxisSnapper : MonoBehaviour
 
         if (slider)
         {
+
             if (axisOrdering == 0)
             {
                 Axes.RemoveXAxis(slider.GetComponent<Axis>());
@@ -88,7 +89,7 @@ public class AxisSnapper : MonoBehaviour
             }
 
             //grabHand.ForceRelease(slider.grabObject);
-            collider.gameObject.GetComponent<AxisConnector>().sliderObject.transform.SetParent(axisParent.parent.parent);
+            collider.gameObject.GetComponent<AxisConnector>().sliderObject.transform.parent = null;
         }
     }
 }

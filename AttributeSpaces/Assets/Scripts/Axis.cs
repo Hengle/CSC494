@@ -36,8 +36,17 @@ public class Axis : MonoBehaviour
 
     void Start()
     {
-        controlGrabbable.OnGrabbed += (grabber, collider) => { controlGrabbed = true; hand = grabber.GetComponent<HandController>(); };
-        controlGrabbable.OnReleased += (linvel, angvel) => { controlGrabbed = false; controlGrabbable.transform.position = controlVisual.transform.position; };
+        controlGrabbable.OnGrabbed += (grabber, collider) => 
+        {
+            controlGrabbed = true;
+            hand = grabber.GetComponent<HandController>();
+        };
+
+        controlGrabbable.OnReleased += (linvel, angvel) => 
+        {
+            controlGrabbed = false;
+            controlGrabbable.transform.position = controlVisual.transform.position;
+        };
     }
 
     // Update is called once per frame

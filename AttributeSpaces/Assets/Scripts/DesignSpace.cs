@@ -33,9 +33,52 @@ public class DesignSpace : MonoBehaviour
     //Outline outline;
 
     public int DesignSpaceID;
+
+    OVRGrabbable grabbable;
+
+    public SaveSpace saveSpace;
+
     // Start is called before the first frame update
     private void Start()
     {
+        grabbable = GetComponent<OVRGrabbable>();
+
+        grabbable.OnGrabbed += (grab, pt) =>
+        {
+            if (saveSpace.SavedSpaces.Contains(this))
+            {
+                // Remove this from work-bench (re-parent it)
+                x_attr?.Enable();
+                y_attr?.Enable();
+                z_attr?.Enable();
+
+                transform.localScale = transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
+
+                saveSpace.SavedSpaces.Remove(this);
+            }
+        };
+
+        grabbable.OnReleased += (linvel, angvel) =>
+        {
+            if (saveSpace.hovering.Contains(this))
+            {
+                // Remove this from work-bench (re-parent it)
+                //x_attr?.Disable();
+                //y_attr?.Disable();
+                //z_attr?.Disable();
+
+                transform.parent = saveSpace.transform.parent;
+                transform.localScale = transform.localScale - new Vector3(0.1f, 0.1f, 0.1f);
+                transform.AnimateLocalPosition(new Vector3(0f, 0.035f, -0.035f));
+
+                saveSpace.SavedSpaces.Add(this);
+            }
+            else
+            {
+                transform.parent = null;
+            }
+        };
+
         //Add itself to the Design Space Manager's list of objects
         DesignSpaceID = DesignSpaceManager.instance.AddDesignSpaceToList(this);
 
@@ -60,7 +103,6 @@ public class DesignSpace : MonoBehaviour
 
         isMainSpace = false;
     }
-
 
     // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!
     public void Update()
@@ -291,7 +333,8 @@ public class DesignSpace : MonoBehaviour
     {
         GameObject proxySphere = GameObject.Instantiate(proxyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         proxySphere.GetComponent<Proxy>().original = selection;
-
+        //Make another copy of the original object
+        proxySphere.GetComponent<Proxy>().original_backup = GameObject.Instantiate(selection, selection.transform.position, Quaternion.identity); ;
         proxySphere.transform.parent = this.transform;
 
         //Get the proxy's original position using teh attributes that you have selected
