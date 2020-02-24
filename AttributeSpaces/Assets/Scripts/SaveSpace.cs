@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SaveSpace : MonoBehaviour
 {
+    public OVRInput.Controller controller;
     public GameObject WorkbenchParent;
     public List<DesignSpace> SavedSpaces = new List<DesignSpace>();
     public OVRGrabber grabHand1, grabHand2;
@@ -20,6 +21,17 @@ public class SaveSpace : MonoBehaviour
     void Update()
     {
         //If something collides with it,     
+        if (OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger, controller) > 0.0f){
+            print("Greater than 0!!!!");
+            for (int i = 0; i < SavedSpaces.Count; i++) {
+                //Show all of the saved spaces beside the user in a line
+                SavedSpaces[i].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                SavedSpaces[i].transform.position = WorkbenchParent.transform.position + new Vector3(0.3f, 0.3f, -((float)i - (float)i / 2.0f) * 0.6f);
+                SavedSpaces[i].transform.localRotation = Quaternion.identity;
+                
+            }
+        }
+
     }
     void OnTriggerEnter(Collider collider)
     {

@@ -52,9 +52,9 @@ public class DesignSpace : MonoBehaviour
                 y_attr?.Enable();
                 z_attr?.Enable();
 
-                transform.localScale = transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
-
-                saveSpace.SavedSpaces.Remove(this);
+                //transform.localScale = transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
+                transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+                //saveSpace.SavedSpaces.Remove(this);
             }
         };
 
@@ -63,15 +63,16 @@ public class DesignSpace : MonoBehaviour
             if (saveSpace.hovering.Contains(this))
             {
                 // Remove this from work-bench (re-parent it)
-                //x_attr?.Disable();
-                //y_attr?.Disable();
-                //z_attr?.Disable();
+                x_attr?.Disable();
+                y_attr?.Disable();
+                z_attr?.Disable();
 
-                transform.parent = saveSpace.transform.parent;
-                transform.localScale = transform.localScale - new Vector3(0.1f, 0.1f, 0.1f);
-                transform.AnimateLocalPosition(new Vector3(0f, 0.035f, -0.035f));
+                //transform.parent = saveSpace.transform.parent;
+                //transform.localScale = transform.localScale - new Vector3(0.1f, 0.1f, 0.1f);
+                //transform.AnimateLocalPosition(new Vector3(0f, 0.035f, -0.035f));
 
                 saveSpace.SavedSpaces.Add(this);
+                print("Added this!!");
             }
             else
             {
