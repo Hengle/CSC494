@@ -9,12 +9,14 @@ public class AxisManager : MonoBehaviour
     public Axis y_axis;
     public Axis z_axis;
     public DesignSpace DS;
+    SavedSpaceManager SavedSpaces;
     // Start is called before the first frame update
     void Start()
     {
         x_axis = null;
         y_axis = null;
         z_axis = null;
+        SavedSpaces = SavedSpaceManager.instance;
     }
 
     // Update is called once per frame
@@ -29,6 +31,13 @@ public class AxisManager : MonoBehaviour
         //Expand the design space box to accomodate the new axis
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetX(1.0f);
         DS.UpdateLocations();
+        //Set up the grabb handlers for the control cube
+        X.controlGrabbable.OnGrabbed += (grab, pt) =>
+        {
+            //Save a snapshot when the axis is moved
+            SavedSpaces.SaveSpace(DS);
+        };
+
         //TODO update where the objects are in the space
     }
     public void UpdateYAxis(Axis Y)
@@ -38,6 +47,11 @@ public class AxisManager : MonoBehaviour
         //Expand the design space box to accomodate the new axis
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetY(1.0f);
         DS.UpdateLocations();
+        Y.controlGrabbable.OnGrabbed += (grab, pt) =>
+        {
+            //Save a snapshot when the axis is moved
+            SavedSpaces.SaveSpace(DS);
+        };
     }
     public void UpdateZAxis(Axis Z)
     {
@@ -46,6 +60,11 @@ public class AxisManager : MonoBehaviour
         //Expand the design space box to accomodate the new axis
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetZ(1.0f);
         DS.UpdateLocations();
+        Z.controlGrabbable.OnGrabbed += (grab, pt) =>
+        {
+            //Save a snapshot when the axis is moved
+            SavedSpaces.SaveSpace(DS);
+        };
     }
 
     public void RemoveXAxis(Axis X)
@@ -54,7 +73,7 @@ public class AxisManager : MonoBehaviour
         DS.x_attr = null;
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetX(0.1f);
         DS.UpdateLocations();
-        //TODO update where the objects are in the space
+
     }
     public void RemoveYAxis(Axis Y)
     {
@@ -62,6 +81,7 @@ public class AxisManager : MonoBehaviour
         DS.y_attr = null;
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetY(0.1f);
         DS.UpdateLocations();
+
     }
     public void RemoveZAxis(Axis Z)
     {
@@ -69,5 +89,6 @@ public class AxisManager : MonoBehaviour
         DS.z_attr = null;
         DS.spaceBox.transform.localScale = DS.spaceBox.transform.localScale.SetZ(0.1f);
         DS.UpdateLocations();
+
     }
 }

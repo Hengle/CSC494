@@ -76,21 +76,22 @@ public class Proxy : MonoBehaviour
        
         if (isVoxel)
         {
-            /*
+            
             //Update the colour!!!
             //TODO
-            getCurrentValue(original);
+            //getCurrentValue(original);
                 //Get the x attr's attribute and then set the mesh material to be that attribute's current value
             if (parentSpace.x_attr) { GetComponent<MeshRenderer>().material.SetFloat("_DeltaRed", parentSpace.x_attr.currentValue);  }
             if (parentSpace.y_attr) { GetComponent<MeshRenderer>().material.SetFloat("_DeltaGreen", parentSpace.y_attr.currentValue); }
             if (parentSpace.z_attr) { GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", parentSpace.z_attr.currentValue); }
-            */
+            
         }
        
         //Basically animates the interaction
         //Only call this if the parent is the main design space
         else
         {
+            //Only update how it looks if it's the main design space
             if (DesignSpaceManager.instance.GetMainDesignSpace().transform == this.transform.parent)
             {
                 //0.1 is hardcoded so that the representations aren't too big
@@ -99,7 +100,7 @@ public class Proxy : MonoBehaviour
                 Vector3 pos = transform.parent.InverseTransformPoint(transform.position);
 
                 //OR store the delta of the bounding box transform and change the original object by the same amount
-                Vector3 newPos = transform.localPosition - past_position;
+                //Vector3 newPos = transform.localPosition - past_position;
 
                 //TODO you need to update the original object based on where the proxy is!!!
                 //original.transform.localScale += newPos;
@@ -107,6 +108,16 @@ public class Proxy : MonoBehaviour
                 if (parentSpace.y_attr) { parentSpace.y_attr.attribute.applyAttributeChange(this, parentSpace.y_attr, 1, parentSpace.y_attr.currentValue); }
                 if (parentSpace.z_attr) { parentSpace.z_attr.attribute.applyAttributeChange(this, parentSpace.z_attr, 2, parentSpace.z_attr.currentValue); }
 
+                //Now update the mesh of the proxy to look like the updated object that it represents
+                if (GetComponent<MeshRenderer>() && original.GetComponent<MeshRenderer>())
+                {
+                    GetComponent<MeshRenderer>().material = original.GetComponent<MeshRenderer>().material;
+                    GetComponent<MeshFilter>().mesh = original.GetComponent<MeshFilter>().mesh;
+                    if (GetComponent<MeshCollider>())
+                    {
+                        GetComponent<MeshCollider>().sharedMesh = original.GetComponent<MeshFilter>().mesh;
+                    }
+                }
 
                 //Store the delta for how much it's moving and then use that to change the size
                 //This is to avoid having the bounding box mess up the scale of the final object

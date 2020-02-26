@@ -29,50 +29,50 @@ public class DesignSpace : MonoBehaviour
     Vector3 controlCubeLocation;
 
     public GameObject originCube;
-    //Adding the highlight as disabled to begin with
-    //Outline outline;
 
     public int DesignSpaceID;
 
     OVRGrabbable grabbable;
 
-    public SaveSpace saveSpace;
+    SavedSpaceManager SavedSpaces;
+
+    public bool isSaveClone;
+
+    public AxisManager axisManager;
 
     // Start is called before the first frame update
     private void Start()
     {
+        SavedSpaces = SavedSpaceManager.instance;
         grabbable = GetComponent<OVRGrabbable>();
 
         grabbable.OnGrabbed += (grab, pt) =>
         {
-            if (saveSpace.SavedSpaces.Contains(this))
+            if (SavedSpaces.SavedSpaces.Contains(this))
             {
-                // Remove this from work-bench (re-parent it)
-                x_attr?.Enable();
-                y_attr?.Enable();
-                z_attr?.Enable();
 
                 //transform.localScale = transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
-                transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
-                //saveSpace.SavedSpaces.Remove(this);
+                //Disable the design space when it's saved
+                this.gameObject.SetActive(true);
+                SavedSpaces.SavedSpaces.Remove(this);
             }
+
         };
 
         grabbable.OnReleased += (linvel, angvel) =>
         {
-            if (saveSpace.hovering.Contains(this))
+            if (SavedSpaces.hovering.Contains(this))
             {
-                // Remove this from work-bench (re-parent it)
-                x_attr?.Disable();
-                y_attr?.Disable();
-                z_attr?.Disable();
-
-                //transform.parent = saveSpace.transform.parent;
+                //transform.parent = SavedSpaces.transform.parent;
                 //transform.localScale = transform.localScale - new Vector3(0.1f, 0.1f, 0.1f);
                 //transform.AnimateLocalPosition(new Vector3(0f, 0.035f, -0.035f));
 
-                saveSpace.SavedSpaces.Add(this);
-                print("Added this!!");
+                //SavedSpaces.SavedSpaces.Add(this);
+                
+                SavedSpaces.SaveSpace(this);
+
+                this.gameObject.SetActive(false);
+
             }
             else
             {
@@ -85,8 +85,6 @@ public class DesignSpace : MonoBehaviour
 
         controlCubeLocation = controlCube.transform.position;
 
-        //Set it to be tiny by default
-        //transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         if (originCube.transform.GetComponent<MeshRenderer>())
         {
             originCube.transform.GetComponent<MeshRenderer>().material.color = Color.white;
@@ -102,16 +100,33 @@ public class DesignSpace : MonoBehaviour
             constraintList.Add(child.gameObject);
         }
 
-        isMainSpace = false;
+        //Set up the grabb handlers for the control cube
+        controlCube.GetComponent<OVRGrabbable>().OnGrabbed += (grab, pt) =>
+        {
+            //Save a snapshot when the control cube is grabbed because you know that you're about to move it to another location
+            SavedSpaces.SaveSpace(this);
+        };
+
+        isSaveClone = false;
     }
 
     // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!
     public void Update()
     {
+
+        //If this is a clone of another space, don't activate it!
+        if (isSaveClone) {
+            DesignSpaceManager.instance.RemoveDesignSpaceFromList(this);
+        }
+        //Don't update if it's not the main space
+        if (!isMainSpace) {
+            return;
+        }
         //Update the slider location based on where the box is (but only the one component that changed)                            
         //The range for the slider goes from -0.5 to 0.5 so you need to add an offset
         if (controlCube.isGrabbed)
         {
+
             if (x_attr)
             {
                 x_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
@@ -214,6 +229,11 @@ public class DesignSpace : MonoBehaviour
 
     public void Animate()
     {
+        //Don't update if it's not the main space
+        if (!isMainSpace)
+        {
+            return;
+        }
         //Move the voxels that have reached their location into the main list
         for (int i = 0; i < voxels.Count; i++) {
             Proxy child = voxels[i];
@@ -335,7 +355,9 @@ public class DesignSpace : MonoBehaviour
         GameObject proxySphere = GameObject.Instantiate(proxyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         proxySphere.GetComponent<Proxy>().original = selection;
         //Make another copy of the original object
-        proxySphere.GetComponent<Proxy>().original_backup = GameObject.Instantiate(selection, selection.transform.position, Quaternion.identity); ;
+        proxySphere.GetComponent<Proxy>().original_backup = GameObject.Instantiate(selection, selection.transform.position, selection.transform.localRotation);
+        //Have an invisible backup so that you know what was there originally
+        proxySphere.GetComponent<Proxy>().original_backup.SetActive(false);
         proxySphere.transform.parent = this.transform;
 
         //Get the proxy's original position using teh attributes that you have selected
@@ -388,6 +410,12 @@ public class DesignSpace : MonoBehaviour
 
     //Applies the deltas shown by the space to the objects in the real scene
     public void ApplyToWorld() {
+        //Don't update if it's not the main space
+        if (!isMainSpace)
+        {
+            return;
+        }
+
         //Loop through all the objects and apply the transformations based on where the object is in the design space
         //For all of the proxies in this space, look at their position 
         //and apply the transformations to the originals in the world

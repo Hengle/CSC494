@@ -74,6 +74,7 @@ public class Attribute : MonoBehaviour
                 //Just change the x value of the scale
                 //scale = original bounding box x
                 proxy.original.transform.localScale = proxy.original.transform.localScale.SetX(proxy.original_backup.transform.localScale.x + newValue);
+                print("Applying the attribute shift x");
                 break;
 
             case AttributeType.ScaleShiftY:

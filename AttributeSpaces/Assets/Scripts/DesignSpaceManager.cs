@@ -52,6 +52,14 @@ public class DesignSpaceManager : MonoBehaviour
         //Return the index of the newly added space
         return _DesignSpaceList.Count -1;
     }
+
+    public int RemoveDesignSpaceFromList(DesignSpace newSpace)
+    {
+        _DesignSpaceList.Remove(newSpace);
+        //Return the index of the newly added space
+        return _DesignSpaceList.Count - 1;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,7 +69,12 @@ public class DesignSpaceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //If there's just one space then set it to be the default
+        if (_DesignSpaceList.Count == 1)
+        {
+            _DesignSpaceList[0].isMainSpace = true;
+        }
+
         //enable in case it isn't already
         if (_DesignSpaceList[main_index])
         {
@@ -72,8 +85,22 @@ public class DesignSpaceManager : MonoBehaviour
             }
         }
         
-        foreach (DesignSpace space in _DesignSpaceList) { 
-            space.Animate();
+        for (int i = 0; i< _DesignSpaceList.Count; i++) {
+
+            _DesignSpaceList[i].Animate();
+
+            if (_DesignSpaceList[i].isMainSpace == true)
+            {
+                _DesignSpaceList[i].x_attr?.Enable();
+                _DesignSpaceList[i].y_attr?.Enable();
+                _DesignSpaceList[i].z_attr?.Enable();
+            }
+            else {
+                _DesignSpaceList[i].x_attr?.Disable();
+                _DesignSpaceList[i].y_attr?.Disable();
+                _DesignSpaceList[i].z_attr?.Disable();
+            }
+
         }
 
         if (OVRInput.GetDown(OVRInput.Button.Three, controller))
@@ -90,7 +117,7 @@ public class DesignSpaceManager : MonoBehaviour
             //Don't do anything if there is only 1 space
             if (main_index != new_index)
             {
-                
+
                 //_DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 if (_DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>())
                 {
