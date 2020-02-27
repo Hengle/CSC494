@@ -12,7 +12,13 @@ public class SavedSpaceManager : MonoBehaviour
     public List<DesignSpace> SavedSpaces = new List<DesignSpace>();
     public OVRGrabber grabHand1, grabHand2;
 
+    public List<Vector3> SavedSpaceLocations = new List<Vector3>();
+
     public List<DesignSpace> hovering = new List<DesignSpace>();
+
+    public GameObject SavedSpacesCollection;
+
+    public BoxCollider SlideGrabbable;
 
     private void Awake()
     {
@@ -101,9 +107,10 @@ public class SavedSpaceManager : MonoBehaviour
         for (int i = 0; i < SavedSpaces.Count; i++) {
             //Move each of the existing spaces over by a unit
             SavedSpaces[i].transform.localPosition += new Vector3(0.4f, 0.0f, 0.0f);
+            SavedSpaceLocations[i] += new Vector3(0.4f, 0.0f, 0.0f);
         }
 
-        DesignSpace clone = Instantiate(designSpace, transform.parent.localPosition + new Vector3(0f, 0f, -0.1f), transform.parent.localRotation, transform.parent) as DesignSpace;
+        DesignSpace clone = Instantiate(designSpace, transform.parent.localPosition + new Vector3(0f, 0f, -0.1f), transform.parent.localRotation, SavedSpacesCollection.transform) as DesignSpace;
         clone.isSaveClone = true;
 
         //Disable the colliders for the axes
@@ -113,8 +120,15 @@ public class SavedSpaceManager : MonoBehaviour
         if (clone.x_attr) { clone.x_attr.GetComponent<Collider>().enabled = false; }
         if (clone.y_attr) { clone.y_attr.GetComponent<Collider>().enabled = false; }
         if (clone.z_attr) { clone.z_attr.GetComponent<Collider>().enabled = false; }
+
         SavedSpaces.Add(clone);
+        SavedSpaceLocations.Add(clone.transform.localPosition);
 
         //update the position of everything on the table right now and shift it to the left. The most recent things is in the centre by default
+    }
+    private void LateUpdate()
+    {
+        SlideGrabbable.transform.rotation = Quaternion.identity;
+        SavedSpacesCollection.transform.localPosition = new Vector3(SavedSpacesCollection.transform.localPosition.x, 0.0f, 0f);
     }
 }
