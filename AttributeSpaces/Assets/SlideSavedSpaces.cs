@@ -46,9 +46,9 @@ public class SlideSavedSpaces : MonoBehaviour
         }
         else
         {
-            //snap back to the original position
+            //Snap back to the original position
             grabbable.transform.position = SavedSpaces.SavedSpacesCollection.transform.position + new Vector3(0f, 0.12f, 0f);
-            //grabbable.transform.rotation = SavedSpaces.SavedSpacesCollection.transform.rotation;
+            grabbable.transform.rotation = SavedSpaces.SavedSpacesCollection.transform.rotation;
 
             grabbableCollider.center = grabbableCollider.center.SetX(-SavedSpaces.SavedSpacesCollection.transform.localPosition.x / grabbable.transform.localScale.x);
         }

@@ -89,6 +89,7 @@ public class ScrollableList : MonoBehaviour
 
         textMesh.transform.localPosition = textMesh.transform.localPosition.SetY(math.clamp(textMesh.transform.localPosition.y, 0f, (items.Length - 1) * increment));
 
+        
         // Fade out if hand is not close
         if (withinProximity) 
         {
@@ -98,6 +99,7 @@ public class ScrollableList : MonoBehaviour
         {
             textMesh.SetAlpha(0f);
         }
+        
     }
 
     void LateUpdate()
