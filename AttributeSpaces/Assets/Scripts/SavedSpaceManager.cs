@@ -129,6 +129,7 @@ public class SavedSpaceManager : MonoBehaviour
     private void LateUpdate()
     {
         SlideGrabbable.transform.rotation = Quaternion.identity;
-        SavedSpacesCollection.transform.localPosition = new Vector3(SavedSpacesCollection.transform.localPosition.x, 0.0f, 0f);
+        //Constrain it to only move on the x axis
+        SavedSpacesCollection.transform.localPosition = new Vector3(SavedSpacesCollection.transform.localPosition.x, 0f, 0f);
     }
 }

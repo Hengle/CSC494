@@ -46,8 +46,9 @@ public class SlideSavedSpaces : MonoBehaviour
         }
         else
         {
-            grabbable.transform.position = SavedSpaces.SavedSpacesCollection.transform.position;
-            grabbable.transform.rotation = SavedSpaces.SavedSpacesCollection.transform.rotation;
+            //snap back to the original position
+            grabbable.transform.position = SavedSpaces.SavedSpacesCollection.transform.position + new Vector3(0f, 0.12f, 0f);
+            //grabbable.transform.rotation = SavedSpaces.SavedSpacesCollection.transform.rotation;
 
             grabbableCollider.center = grabbableCollider.center.SetX(-SavedSpaces.SavedSpacesCollection.transform.localPosition.x / grabbable.transform.localScale.x);
         }
@@ -58,7 +59,6 @@ public class SlideSavedSpaces : MonoBehaviour
 
     void Grabbed(OVRGrabber hand, Collider collider)
     {
-        //if (!withinProximity) return;
 
         grabbed = true;
     }
