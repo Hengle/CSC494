@@ -30,7 +30,7 @@ public interface IAttribute
 public enum AttributeType
 {
     //All of the possible attributes that we want
-    RedRGB, GreenRGB, BlueRGB, ScaleShiftX, ScaleShiftY, ScaleShiftZ, RedShift, GreenShift, BlueShift,
+    RedRGB, GreenRGB, BlueRGB, ScaleShiftX, ScaleShiftY, ScaleShiftZ, RedShift, GreenShift, BlueShift, Duplicates
 
     /*Each SceneObject has a list of Attributes
      * Each Attribute is a monobehaviour with an enum that tells you which specific one it is
@@ -44,7 +44,7 @@ public class Attribute : MonoBehaviour
     public float defaultMax;
     public float min;
     public float max;
-    public AttributeType attribute;
+    public AttributeType attributeType;
 
     private void Start()
     {
@@ -64,7 +64,7 @@ public class Attribute : MonoBehaviour
         Vector3 currentPosition = proxy.transform.localPosition;
 
         //This switch allows you to have multiple actions depending on the type of the attribute
-        switch (attribute) {
+        switch (attributeType) {
             case AttributeType.ScaleShiftX:
                 GetComponent<TextMesh>().text = "Scale Shift X";
                 defaultMin = 0f;
@@ -125,6 +125,16 @@ public class Attribute : MonoBehaviour
                 proxy.original.GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", newValue);
                 proxy.GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", newValue);
                 break;
+            case AttributeType.Duplicates:
+                //Adds a bunch of duplicates to the scene at a regular distance
+                GetComponent<TextMesh>().text = "Duplicates";
+                defaultMin = 0f;
+                defaultMax = 1.0f;
+                min = 0f;
+                max = 1.0f;
+                proxy.original.GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", newValue);
+                proxy.GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", newValue);
+                break;
             default:
                 break;
         }
@@ -132,7 +142,7 @@ public class Attribute : MonoBehaviour
     }
     public float getCurrentValue(GameObject originalObject, Proxy proxy=null)
     {
-        switch (attribute)
+        switch (attributeType)
         {
             case AttributeType.ScaleShiftX:
                 //Just change the x value of the scale

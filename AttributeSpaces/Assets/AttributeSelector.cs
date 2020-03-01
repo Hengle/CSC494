@@ -30,27 +30,27 @@ public class AttributeSelector : MonoBehaviour
             //Now set the Attribute portion of the object
             if (attr_string == "Scale X")
             {
-                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attribute = AttributeType.ScaleShiftX;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.ScaleShiftX;
             }
             else if (attr_string == "Scale Y")
             {
-                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attribute = AttributeType.ScaleShiftY;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.ScaleShiftY;
             }
             else if (attr_string == "Scale Z")
             {
-                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attribute = AttributeType.ScaleShiftZ;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.ScaleShiftZ;
             }
             else if (attr_string == "Red Shift")
             {
-                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attribute = AttributeType.RedShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.RedShift;
             }
             else if (attr_string == "Green Shift")
             {
-                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attribute = AttributeType.GreenShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.GreenShift;
             }
             else if (attr_string == "Blue Shift")
             {
-                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attribute = AttributeType.BlueShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.BlueShift;
             }
 
 

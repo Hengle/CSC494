@@ -56,7 +56,7 @@ public class Proxy : MonoBehaviour
             //Set up how the proxy should look at the very beginning
             //---------------------
             //0.1 is hardcoded so that the representations aren't too big
-            SetGlobalScale(original.transform.localScale * 0.01f);
+            SetGlobalScale(original.transform.localScale * 0.1f);
             //------
 
         }
