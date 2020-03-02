@@ -26,7 +26,8 @@ public class SpacePanelVisibilityControl : MonoBehaviour
     {
         if (OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger, controller) > 0.0f)
         {
-            savedSpaceManager.UpdateSpaceContents(TEMPList);
+            //TODO take out everything with TEMP in it 
+            savedSpaceManager.UpdateSpaceContents();
             SpacePanel.gameObject.SetActive(true);
         }
         else {
