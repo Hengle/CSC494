@@ -76,7 +76,11 @@ public class DesignSpace : MonoBehaviour
             }
             else
             {
+                //Means that they want to add it to the world
                 transform.parent = null;
+                SavedSpaces.SavedSpaces.Remove(this);
+                SavedSpaces.enabled = true;
+                transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
         };
 
@@ -126,7 +130,6 @@ public class DesignSpace : MonoBehaviour
         //The range for the slider goes from -0.5 to 0.5 so you need to add an offset
         if (controlCube.isGrabbed)
         {
-
             if (x_attr)
             {
                 x_attr.controlGrabbable.transform.localPosition = new Vector3(controlCube.transform.localPosition.x - 0.5f, 0f, 0f);
@@ -222,7 +225,23 @@ public class DesignSpace : MonoBehaviour
             }
 
         }
-        
+
+        float x_pos = controlCube.transform.localPosition.x;
+        float y_pos = controlCube.transform.localPosition.y;
+        float z_pos = controlCube.transform.localPosition.z;
+        if (!x_attr) {
+            x_pos = 0f;
+        }
+        if (!y_attr)
+        {
+            y_pos = 0f;
+        }
+        if (!z_attr)
+        {
+            z_pos = 0f;
+        }
+        //Limits the degrees of freedon of the control cube to only the defined axes
+        controlCube.transform.localPosition = new Vector3(x_pos, y_pos, z_pos);
 
 
     }

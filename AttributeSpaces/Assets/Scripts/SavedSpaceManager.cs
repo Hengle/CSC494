@@ -52,22 +52,6 @@ public class SavedSpaceManager : MonoBehaviour
         {
             hovering.Add(designSpace);
         }
-
-        //if (designSpace)
-        //{
-        //    designSpace.transform.localScale = designSpace.transform.localScale - new Vector3(0.1f, 0.1f, 0.1f);
-            
-        //    //Make it so that they aren't movable
-        //    if (designSpace.x_attr) { designSpace.x_attr.Disable(); }
-        //    if (designSpace.y_attr) { designSpace.y_attr.Disable(); }
-        //    if (designSpace.z_attr) { designSpace.z_attr.Disable(); }
-
-        //    designSpace.gameObject.transform.parent = WorkbenchParent.transform;
-
-        //    designSpace.transform.localPosition = new Vector3(0f, 0.035f, -0.035f);
-
-        //    SavedSpaces.Add(designSpace);
-        //}
     }
     void OnTriggerExit(Collider collider)
     {
@@ -79,35 +63,12 @@ public class SavedSpaceManager : MonoBehaviour
             hovering.Remove(designSpace);
         }
 
-        //Bring it back up to size
-        //if (designSpace)
-        //{
-        //    grabHand1.ForceRelease(designSpace.GetComponent<OVRGrabbable>());
-        //    grabHand2.ForceRelease(designSpace.GetComponent<OVRGrabbable>());
-
-        //    designSpace.transform.localScale = designSpace.transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
-        //    if (designSpace.x_attr) { designSpace.x_attr.Enable(); }
-        //    if (designSpace.y_attr) { designSpace.y_attr.Enable(); }
-        //    if (designSpace.z_attr) { designSpace.z_attr.Enable(); }
-
-        //    //Free it from the workbench
-        //    designSpace.transform.parent = WorkbenchParent.transform.parent;
-
-        //    SavedSpaces.Remove(designSpace);
-        //}
-
     }
     public void SaveSpace(DesignSpace designSpace) {
 
-        //Move all the existing spaces down
-        //Actually this is covered by the update now!
-        //for (int i = 0; i < SavedSpaces.Count; i++) {
-            //Move each of the existing spaces over by a unit
-        //    SavedSpaces[i].transform.localPosition += new Vector3(0.4f, 0.0f, 0.0f);
-        //}
-
         DesignSpace clone = (DesignSpace)Instantiate(designSpace, transform.parent.localPosition + new Vector3(0f, 0f, -0.1f), transform.parent.localRotation, SavedSpacesCollection.transform);
         clone.isSaveClone = true;
+        clone.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
         //Disable the colliders for the axes
         foreach (Transform child in clone.axisManager.transform) {
@@ -157,7 +118,7 @@ public class SavedSpaceManager : MonoBehaviour
         {
             if (SavedSpaces[i].gameObject.activeSelf)
             {
-                SavedSpaces[i].transform.localPosition = new Vector3(0.4f * (float)(activeSpaceCounter), 0.0f, 0.0f);
+                SavedSpaces[i].transform.localPosition = new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f);
                 activeSpaceCounter -= 1;
             }
         }
