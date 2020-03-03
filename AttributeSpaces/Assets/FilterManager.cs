@@ -21,14 +21,13 @@ public class FilterManager : MonoBehaviour
     private void Awake()
     {
         _FilterManagerInstance = this;
-
+        SavedSpaces = SavedSpaceManager.instance;
+        attributeFilters = new List<Attribute>();
+        objectFilters = new List<GameObject>();
     }
 
     void Start()
     {
-        SavedSpaces = SavedSpaceManager.instance;
-        attributeFilters = new List<Attribute>();
-        objectFilters = new List<GameObject>();
 
     }
 
@@ -58,52 +57,50 @@ public class FilterManager : MonoBehaviour
             hovering.Remove(collider.gameObject);
             
         }
-        if (attributeFilter && grabbableAttr && attributeFilters.Contains(attributeFilter) && grabbableAttr.isGrabbed) {
-
-            attributeFilters.Remove(attributeFilter);
-            SavedSpaces.UpdateSpaceContents();
-        }
 
         }
     public bool MatchesCriteria(DesignSpace querySpace)
-        {
-            //If there are no restrictions, just show everything
-            if (attributeFilters.Count == 0 && objectFilters.Count == 0) {
-                return true;
-            }
-            bool matches = false;
-
-            //Check if the given design space contains any of the given attributes
-            foreach (Attribute attr in attributeFilters)
-            {
-                if (querySpace.x_attr && querySpace.x_attr.attribute.attributeType == attr.attributeType)
-                {
-                    matches = true;
-                    break;
-                }
-                if (querySpace.y_attr && querySpace.y_attr.attribute.attributeType == attr.attributeType)
-                {
-                    matches = true;
-                    break;
-                }
-                if (querySpace.z_attr && querySpace.z_attr.attribute.attributeType == attr.attributeType)
-                {
-                    matches = true;
-                    break;
-                }
-            }
-            //Check if the given design space has any of the objects represented
-            foreach (GameObject sceneObject in objectFilters)
-            {
-                foreach (Proxy proxy in querySpace.proxyList)
-                {
-                    if (proxy.original == sceneObject)
-                    {
-                        matches = true;
-                        break;
-                    }
-                }
-            }
-            return matches;
+    {
+        bool isActive = querySpace.gameObject.activeSelf;
+        querySpace.gameObject.SetActive(true);
+        //If there are no restrictions, just show everything
+        if (attributeFilters.Count == 0 && objectFilters.Count == 0) {
+            return true;
         }
+        bool matches = false;
+
+        //Check if the given design space contains any of the given attributes
+        foreach (Attribute attr in attributeFilters)
+        {
+            if (querySpace.x_attr && querySpace.x_attr.attribute.attributeType == attr.attributeType)
+            {
+                matches = true;
+                break;
+            }
+            if (querySpace.y_attr && querySpace.y_attr.attribute.attributeType == attr.attributeType)
+            {
+                matches = true;
+                break;
+            }
+            if (querySpace.z_attr && querySpace.z_attr.attribute.attributeType == attr.attributeType)
+            {
+                matches = true;
+                break;
+            }
+        }
+        //Check if the given design space has any of the objects represented
+        foreach (GameObject sceneObject in objectFilters)
+        {
+            foreach (Proxy proxy in querySpace.proxyList)
+            {
+                if (proxy.original == sceneObject)
+                {
+                    matches = true;
+                    break;
+                }
+            }
+        }
+        querySpace.gameObject.SetActive(isActive);
+        return matches;
+    }
 }

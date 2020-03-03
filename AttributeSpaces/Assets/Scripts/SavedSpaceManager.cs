@@ -29,13 +29,14 @@ public class SavedSpaceManager : MonoBehaviour
     private void Awake()
     {
         _SavedSpaceManagerInstance = this;
+        filterManager = FilterManager.instance;
 
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        filterManager = FilterManager.instance;
+        
     }
 
     // Update is called once per frame
@@ -99,12 +100,13 @@ public class SavedSpaceManager : MonoBehaviour
     public void SaveSpace(DesignSpace designSpace) {
 
         //Move all the existing spaces down
-        for (int i = 0; i < SavedSpaces.Count; i++) {
+        //Actually this is covered by the update now!
+        //for (int i = 0; i < SavedSpaces.Count; i++) {
             //Move each of the existing spaces over by a unit
-            SavedSpaces[i].transform.localPosition += new Vector3(0.4f, 0.0f, 0.0f);
-        }
+        //    SavedSpaces[i].transform.localPosition += new Vector3(0.4f, 0.0f, 0.0f);
+        //}
 
-        DesignSpace clone = Instantiate(designSpace, transform.parent.localPosition + new Vector3(0f, 0f, -0.1f), transform.parent.localRotation, SavedSpacesCollection.transform) as DesignSpace;
+        DesignSpace clone = (DesignSpace)Instantiate(designSpace, transform.parent.localPosition + new Vector3(0f, 0f, -0.1f), transform.parent.localRotation, SavedSpacesCollection.transform);
         clone.isSaveClone = true;
 
         //Disable the colliders for the axes
@@ -116,13 +118,14 @@ public class SavedSpaceManager : MonoBehaviour
         if (clone.z_attr) { clone.z_attr.GetComponent<Collider>().enabled = false; }
 
         //Hide the object if it doesn't pass the filter
-        if (!filterManager.MatchesCriteria(clone)) {
+        if (filterManager.MatchesCriteria(clone) == false) {
             clone.gameObject.SetActive(false);
         }
         SavedSpaces.Add(clone);
 
-        
+
         //update the position of everything on the table right now and shift it to the left. The most recent things is in the centre by default
+        UpdateSpaceContents();
     }
     private void LateUpdate()
     {
@@ -134,6 +137,7 @@ public class SavedSpaceManager : MonoBehaviour
     //Update which items are active and inactive and then fix their locations in space
     public void UpdateSpaceContents()
     {
+        print("Updating contents");
         int activeSpaceCounter = 0;
         foreach (DesignSpace DS in SavedSpaces)
         {
@@ -144,7 +148,7 @@ public class SavedSpaceManager : MonoBehaviour
             }
             else
             {
-                DS.gameObject.SetActive(true);
+                DS.gameObject.SetActive(false);
             }
         }
 
@@ -153,7 +157,7 @@ public class SavedSpaceManager : MonoBehaviour
         {
             if (SavedSpaces[i].gameObject.activeSelf)
             {
-                SavedSpaces[i].transform.localPosition = new Vector3(-0.4f * (float)(activeSpaceCounter), 0.0f, 0.0f);
+                SavedSpaces[i].transform.localPosition = new Vector3(0.4f * (float)(activeSpaceCounter), 0.0f, 0.0f);
                 activeSpaceCounter -= 1;
             }
         }

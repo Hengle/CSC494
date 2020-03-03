@@ -41,6 +41,8 @@ public class GrabbableAttribute : MonoBehaviour
             }
             else if (!filterManager.hovering.Contains(transform.gameObject)) {
                 this.gameObject.transform.parent = null;
+                filterManager.attributeFilters.Remove(GetComponentInChildren<Attribute>());
+                savedSpaceManager.UpdateSpaceContents();
             }
             //Make it parentless if it's still trapped in a selector
             else if (transform.parent && transform.parent.GetComponent<AttributeSelector>())
