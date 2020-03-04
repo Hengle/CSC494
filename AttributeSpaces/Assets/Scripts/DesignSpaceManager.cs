@@ -30,21 +30,17 @@ public class DesignSpaceManager : MonoBehaviour
      * 
     */
     public DesignSpace GetMainDesignSpace() {
-        if (_DesignSpaceList.Count > 0)
+        if (main_index != -1)
         {
             return _DesignSpaceList[main_index];
         }
-        else {
-            print("No design spaces!");
-            return null;
-        }
-        
+        return null;
     }
     private void Awake()
     {
         _instance = this;
         _DesignSpaceList = new List<DesignSpace>();
-        main_index = 0;
+        main_index = -1;
 
     }
     public int AddDesignSpaceToList(DesignSpace newSpace) {
@@ -76,7 +72,7 @@ public class DesignSpaceManager : MonoBehaviour
         }
 
         //enable in case it isn't already
-        if (_DesignSpaceList[main_index])
+        if (main_index != -1 && _DesignSpaceList[main_index])
         {
             //_DesignSpaceList[main_index].transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             if (_DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>())
@@ -103,6 +99,9 @@ public class DesignSpaceManager : MonoBehaviour
 
         }
 
+        //This section is no longer needed because each time an attribute space is grabbed, it sets the main index 
+        
+        /*
         if (OVRInput.GetDown(OVRInput.Button.Three, controller))
         {
             int new_index;
@@ -118,7 +117,6 @@ public class DesignSpaceManager : MonoBehaviour
             if (main_index != new_index)
             {
 
-                //_DesignSpaceList[main_index].transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 if (_DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>())
                 {
                     _DesignSpaceList[main_index].originCube.transform.GetComponent<MeshRenderer>().material.color = Color.white;
@@ -139,7 +137,7 @@ public class DesignSpaceManager : MonoBehaviour
             }
 
         }
-
+        */
 
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities;
+
 
 public class SavedSpaceManager : MonoBehaviour
 {
@@ -84,7 +86,6 @@ public class SavedSpaceManager : MonoBehaviour
         }
         SavedSpaces.Add(clone);
 
-
         //update the position of everything on the table right now and shift it to the left. The most recent things is in the centre by default
         UpdateSpaceContents();
     }
@@ -118,7 +119,8 @@ public class SavedSpaceManager : MonoBehaviour
         {
             if (SavedSpaces[i].gameObject.activeSelf)
             {
-                SavedSpaces[i].transform.localPosition = new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f);
+                SavedSpaces[i].transform.AnimateLocalPosition(new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f));
+                //SavedSpaces[i].transform.localPosition = new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f);
                 activeSpaceCounter -= 1;
             }
         }

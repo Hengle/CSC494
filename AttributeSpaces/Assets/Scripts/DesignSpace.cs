@@ -40,9 +40,12 @@ public class DesignSpace : MonoBehaviour
 
     public AxisManager axisManager;
 
+    public DesignSpaceManager designSpaceManager;
+
     // Start is called before the first frame update
     private void Start()
     {
+        designSpaceManager = DesignSpaceManager.instance;
         SavedSpaces = SavedSpaceManager.instance;
         grabbable = GetComponent<OVRGrabbable>();
 
@@ -50,12 +53,15 @@ public class DesignSpace : MonoBehaviour
         {
             if (SavedSpaces.SavedSpaces.Contains(this))
             {
-
                 //transform.localScale = transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
                 //Disable the design space when it's saved
                 this.gameObject.SetActive(true);
                 SavedSpaces.SavedSpaces.Remove(this);
             }
+
+            designSpaceManager.main_index = DesignSpaceID;
+            originCube.transform.GetComponent<MeshRenderer>().material.color = Color.black;
+
 
         };
 
@@ -73,6 +79,8 @@ public class DesignSpace : MonoBehaviour
 
                 this.gameObject.SetActive(false);
 
+                UnapplyFromWorld();
+
             }
             else
             {
@@ -81,7 +89,10 @@ public class DesignSpace : MonoBehaviour
                 SavedSpaces.SavedSpaces.Remove(this);
                 SavedSpaces.enabled = true;
                 transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                ApplyToWorld();
             }
+            designSpaceManager.main_index = -1;
+            originCube.transform.GetComponent<MeshRenderer>().material.color = Color.white;
         };
 
         //Add itself to the Design Space Manager's list of objects
@@ -226,6 +237,7 @@ public class DesignSpace : MonoBehaviour
 
         }
 
+        //Snapping the control sphere to be on just the axes that are defined
         float x_pos = controlCube.transform.localPosition.x;
         float y_pos = controlCube.transform.localPosition.y;
         float z_pos = controlCube.transform.localPosition.z;
@@ -429,11 +441,6 @@ public class DesignSpace : MonoBehaviour
 
     //Applies the deltas shown by the space to the objects in the real scene
     public void ApplyToWorld() {
-        //Don't update if it's not the main space
-        if (!isMainSpace)
-        {
-            return;
-        }
 
         //Loop through all the objects and apply the transformations based on where the object is in the design space
         //For all of the proxies in this space, look at their position 

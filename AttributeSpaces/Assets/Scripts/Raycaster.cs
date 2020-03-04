@@ -70,10 +70,13 @@ public class Raycaster : MonoBehaviour
 
             //Make sure that you aren't hitting something in the axis. If it's in an axis, do not select
             //TODO change this to check ALL design spaces
-            if ((!pointedAt.GetComponent<Voxelizable>()) && (pointedAt.gameObject.transform.parent != DSManager.GetMainDesignSpace().gameObject.transform) && (pointedAt.gameObject.transform != DSManager.GetMainDesignSpace().gameObject.transform)){
-                DSManager.GetMainDesignSpace().SelectObject(pointedAt);
+            if (DSManager.GetMainDesignSpace())
+            {
+                if ((!pointedAt.GetComponent<Voxelizable>()) && (pointedAt.gameObject.transform.parent != DSManager.GetMainDesignSpace().gameObject.transform) && (pointedAt.gameObject.transform != DSManager.GetMainDesignSpace().gameObject.transform))
+                {
+                    DSManager.GetMainDesignSpace().SelectObject(pointedAt);
+                }
             }
-
             rayVisual.SetPosition(0, transform.position);
             rayVisual.SetPosition(1, hit.point);
 

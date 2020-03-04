@@ -92,7 +92,7 @@ public class Proxy : MonoBehaviour
         else
         {
             //Only update how it looks if it's the main design space
-            if (DesignSpaceManager.instance.GetMainDesignSpace().transform == this.transform.parent)
+            if (DesignSpaceManager.instance.GetMainDesignSpace() && DesignSpaceManager.instance.GetMainDesignSpace().transform == this.transform.parent)
             {
                 //0.1 is hardcoded so that the representations aren't too big
                 SetGlobalScale(original.transform.localScale * 0.1f);
