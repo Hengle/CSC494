@@ -64,6 +64,17 @@ public class AxisSnapper : MonoBehaviour
                 Axes.UpdateZAxis(slider.GetComponent<Axis>());
 
             }
+            
+            //Disable the collider once it snaps on 
+            if (this.GetComponent<BoxCollider>())
+            {
+                this.GetComponent<BoxCollider>().enabled = false;
+            }
+            if (this.GetComponent<SphereCollider>())
+            {
+                this.GetComponent<SphereCollider>().enabled = false;
+            }
+
         }
 
 

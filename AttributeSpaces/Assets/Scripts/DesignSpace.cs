@@ -51,11 +51,11 @@ public class DesignSpace : MonoBehaviour
 
         grabbable.OnGrabbed += (grab, pt) =>
         {
+            //Remove the saved space from the list so that it doesn't get affected by the SS movements after you grab it
             if (SavedSpaces.SavedSpaces.Contains(this))
             {
                 //transform.localScale = transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
                 //Disable the design space when it's saved
-                this.gameObject.SetActive(true);
                 SavedSpaces.SavedSpaces.Remove(this);
             }
 
@@ -67,28 +67,37 @@ public class DesignSpace : MonoBehaviour
 
         grabbable.OnReleased += (linvel, angvel) =>
         {
+            
             if (SavedSpaces.hovering.Contains(this))
             {
-                //transform.parent = SavedSpaces.transform.parent;
-                //transform.localScale = transform.localScale - new Vector3(0.1f, 0.1f, 0.1f);
-                //transform.AnimateLocalPosition(new Vector3(0f, 0.035f, -0.035f));
+                //If it's within the saved space area and not in the saved spaces list yet, add it to the list
+                if (!SavedSpaces.SavedSpaces.Contains(this))
+                {
 
-                //SavedSpaces.SavedSpaces.Add(this);
-                
-                SavedSpaces.SaveSpace(this);
+                    UnapplyFromWorld();
+                    SavedSpaces.SavedSpaces.Add(this);
+                    
 
-                this.gameObject.SetActive(false);
+                    transform.parent = SavedSpaces.SavedSpacesCollection.transform;
+                    transform.localScale = transform.localScale - new Vector3(0.1f, 0.1f, 0.1f);
+                    //transform.AnimateLocalPosition(new Vector3(0f, 0.035f, -0.035f));
+                    this.transform.localRotation = Quaternion.identity;
+                    //LockSpace();
 
-                UnapplyFromWorld();
 
+                }
+                else { //If you just moved it in the space a little bit, correct the orientation
+                    this.transform.localRotation = Quaternion.identity;
+                }
             }
             else
             {
                 //Means that they want to add it to the world
-                transform.parent = null;
+                
                 SavedSpaces.SavedSpaces.Remove(this);
-                SavedSpaces.enabled = true;
+                transform.parent = null;
                 transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                //UnlockSpace();
                 ApplyToWorld();
             }
             designSpaceManager.main_index = -1;
@@ -507,4 +516,66 @@ public class DesignSpace : MonoBehaviour
         }
     }
 
+    //Locks the design space so that all of the axes aren't add/removable, the sliders aren't slidable and the proxies aren't grabbable
+    public void LockSpace() {
+        if (x_attr) {
+            x_attr.Disable();
+        }
+        if (y_attr)
+        {
+            y_attr.Disable();
+        }
+        if (z_attr)
+        {
+            z_attr.Disable();
+        }
+        //Disable all of the axis colliders on the space to make sure you don't accidentally attach or remove stuff
+        foreach (Transform axisCollider in axisManager.transform) {
+            axisCollider.gameObject.SetActive(false);
+        }
+
+        foreach (Proxy proxy in proxyList) {
+            if (proxy.GetComponent<Collider>()) {
+                proxy.GetComponent<Collider>().enabled = false;
+            }
+        }
+
+        controlCube.GetComponent<OVRGrabbable>().enabled = false;
+
+    }
+
+    //Unlock the Design space so that the user can interact with it again
+    public void UnlockSpace() {
+        if (x_attr)
+        {
+            x_attr.Enable();
+        }
+        if (y_attr)
+        {
+            y_attr.Enable();
+        }
+        if (z_attr)
+        {
+            z_attr.Enable();
+        }
+        //Enable all of the colliders on the space again
+        foreach (Transform axisCollider in axisManager.transform)
+        {
+            axisCollider.gameObject.SetActive(true);
+        }
+
+        foreach (Proxy proxy in proxyList)
+        {
+            if (proxy.GetComponent<Collider>())
+            {
+                proxy.GetComponent<Collider>().enabled = true;
+            }
+        }
+
+        controlCube.GetComponent<OVRGrabbable>().enabled = true;
+    }
+    //Checks if this object is compatible with this design space
+    bool isCompatibleWithSpace() {
+        return true;
+    }
 }

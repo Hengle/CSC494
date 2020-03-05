@@ -60,6 +60,10 @@ public class Proxy : MonoBehaviour
             //------
 
         }
+        //Make the proxy not grabbable to prevent accidental grabs
+        if (this.GetComponent<OVRGrabbable>()) {
+            this.GetComponent<OVRGrabbable>().enabled = false;
+        }
 
     }
     public void SetGlobalScale(Vector3 globalScale)

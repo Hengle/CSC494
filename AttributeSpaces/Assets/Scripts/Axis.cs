@@ -52,16 +52,19 @@ public class Axis : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Max grabbed
-        if (controlGrabbed)
-        {
-            UpdateMax();
+        if (enabled) {
+            // Max grabbed
+            if (controlGrabbed)
+            {
+                UpdateMax();
+            }
+
+            highlightPipe.position = (controlVisual.position + minVisual.position) / 2f;
+            highlightPipe.localScale = highlightPipe.localScale.SetY(0.05f * math.abs(currentValue - minValue));
+
+            controlGrabbable.transform.localScale = (float3)0.01f;
         }
 
-        highlightPipe.position = (controlVisual.position + minVisual.position) / 2f;
-        highlightPipe.localScale = highlightPipe.localScale.SetY(0.05f * math.abs(currentValue - minValue));
-
-        controlGrabbable.transform.localScale = (float3)0.01f;
     }
 
     public void UpdateMax()

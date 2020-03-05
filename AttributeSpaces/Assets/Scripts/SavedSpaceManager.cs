@@ -72,13 +72,7 @@ public class SavedSpaceManager : MonoBehaviour
         clone.isSaveClone = true;
         clone.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
-        //Disable the colliders for the axes
-        foreach (Transform child in clone.axisManager.transform) {
-            child.gameObject.GetComponent<Collider>().enabled = false;
-        }
-        if (clone.x_attr) { clone.x_attr.GetComponent<Collider>().enabled = false; }
-        if (clone.y_attr) { clone.y_attr.GetComponent<Collider>().enabled = false; }
-        if (clone.z_attr) { clone.z_attr.GetComponent<Collider>().enabled = false; }
+        //clone.LockSpace();
 
         //Hide the object if it doesn't pass the filter
         if (filterManager.MatchesCriteria(clone) == false) {
@@ -120,7 +114,6 @@ public class SavedSpaceManager : MonoBehaviour
             if (SavedSpaces[i].gameObject.activeSelf)
             {
                 SavedSpaces[i].transform.AnimateLocalPosition(new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f));
-                //SavedSpaces[i].transform.localPosition = new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f);
                 activeSpaceCounter -= 1;
             }
         }
