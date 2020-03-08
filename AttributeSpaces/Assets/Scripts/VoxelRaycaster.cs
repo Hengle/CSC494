@@ -63,8 +63,8 @@ public class VoxelRaycaster : MonoBehaviour
             //pointedAt is the object that you want to select
             pointedAt = hit.collider.gameObject;
 
-            //Only add if it's a voxelizable object
-            if (pointedAt.GetComponent<Voxelizable>())
+            //Only add if it's a voxelizable object and there's a currently selected design space
+            if (pointedAt.GetComponent<Voxelizable>() && DSManager.GetMainDesignSpace())
             {
                 DSManager.GetMainDesignSpace().SelectObject(pointedAt);
             }

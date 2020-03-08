@@ -31,26 +31,38 @@ public class AttributeSelector : MonoBehaviour
             if (attr_string == "Scale X")
             {
                 GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.ScaleShiftX;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.attribute.attributeType = AttributeType.ScaleShiftX;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.label.text = attr_string;
             }
             else if (attr_string == "Scale Y")
             {
                 GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.ScaleShiftY;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.attribute.attributeType = AttributeType.ScaleShiftY;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.label.text = attr_string;
             }
             else if (attr_string == "Scale Z")
             {
                 GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.ScaleShiftZ;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.attribute.attributeType = AttributeType.ScaleShiftZ;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.label.text = attr_string;
             }
             else if (attr_string == "Red Shift")
             {
                 GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.RedShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.attribute.attributeType = AttributeType.RedShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.label.text = attr_string;
             }
             else if (attr_string == "Green Shift")
             {
                 GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.GreenShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.attribute.attributeType = AttributeType.GreenShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.label.text = attr_string;
             }
             else if (attr_string == "Blue Shift")
             {
                 GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.BlueShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.attribute.attributeType = AttributeType.BlueShift;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.label.text = attr_string;
             }
 
 

@@ -302,7 +302,7 @@ public class DesignSpace : MonoBehaviour
             Vector3 colorLocation = new Vector3(x_pos, y_pos, z_pos);
             //colorLocation should be replaces by the value of the original object 
             Vector3 newlocation = Vector3.Lerp(child.transform.localPosition, colorLocation, speed);
-            child.transform.localScale = Vector3.Lerp(child.transform.localScale, Vector3.one * 0.9f, speed);
+            child.transform.localScale = Vector3.Lerp(child.transform.localScale, Vector3.one * 0.6f, speed);
 
             /*
                 *Old version of the lerp that moves everything by the same speed
@@ -425,7 +425,7 @@ public class DesignSpace : MonoBehaviour
             child.gameObject.AddComponent<Proxy>();
             child.gameObject.GetComponent<Proxy>().original = selection;
             child.gameObject.GetComponent<Proxy>().parentSpace = this;
-            proxyList.Add(child.GetComponent<Proxy>());
+            //proxyList.Add(child.GetComponent<Proxy>());
 
             voxels.Add(child.GetComponent<Proxy>());
         }

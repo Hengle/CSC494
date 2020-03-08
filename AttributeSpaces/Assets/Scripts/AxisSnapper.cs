@@ -10,7 +10,6 @@ public class AxisSnapper : MonoBehaviour
     Vector3 originalPosition;
     Quaternion originalRotation;
     public OVRGrabber grabHand;
-    //The design space that these colliders are part of
     public int axisOrdering;
 
     // Start is called before the first frame update
@@ -32,39 +31,71 @@ public class AxisSnapper : MonoBehaviour
 
         if (axisConnector)
         {
+            Transform originalGrabbableAttribute = axisConnector.transform;
+
             //TODO:
             //Check that the axis is compatible with the objects and the rest of the axes
 
-            GameObject slider = axisConnector.sliderObject;
-            //Release it!!!
-            grabHand.ForceRelease(axisConnector.grabObject);
-            //Reparent it to the axes collection
-            slider.transform.SetParent(axisParent);
-            
-            //Snap it to the right position
-            //slider.transform.localPosition = originalPosition;
-            //slider.transform.localRotation = originalRotation;
-            //Slowly have the object float to the right position
-            slider.transform.AnimateLocalPosition(originalPosition);
-            slider.transform.AnimateLocalRotation(originalRotation);
-
             //Now tell the parent which axis was updated
-            if (axisOrdering == 0){
+            if (axisOrdering == 0 && !Axes.DS.x_attr)
+            {
+                GameObject slider = axisConnector.sliderObject;
+                //Release it!!!
+                grabHand.ForceRelease(axisConnector.grabObject);
+                //Reparent it to the axes collection
+                slider.transform.SetParent(axisParent);
+
+                //Slowly have the object float to the right position
+                slider.transform.AnimateLocalPosition(originalPosition);
+                slider.transform.AnimateLocalRotation(originalRotation);
+
                 slider.GetComponent<Axis>().orientation = 0;
                 Axes.UpdateXAxis(slider.GetComponent<Axis>());
 
+                //Hide the old label and show the axis
+                originalGrabbableAttribute.gameObject.SetActive(false);
+                axisConnector.sliderObject.SetActive(true);
+
             }
-            else if (axisOrdering == 1){
+            else if (axisOrdering == 1 && !Axes.DS.y_attr)
+            {
+                GameObject slider = axisConnector.sliderObject;
+                //Release it!!!
+                grabHand.ForceRelease(axisConnector.grabObject);
+                //Reparent it to the axes collection
+                slider.transform.SetParent(axisParent);
+
+                //Slowly have the object float to the right position
+                slider.transform.AnimateLocalPosition(originalPosition);
+                slider.transform.AnimateLocalRotation(originalRotation);
+
                 slider.GetComponent<Axis>().orientation = 1;
                 Axes.UpdateYAxis(slider.GetComponent<Axis>());
 
+                //Hide the old label and show the axis
+                originalGrabbableAttribute.gameObject.SetActive(false);
+                axisConnector.sliderObject.SetActive(true);
+
             }
-            else if (axisOrdering == 2) {
+            else if (axisOrdering == 2 && !Axes.DS.z_attr)
+            {
+                GameObject slider = axisConnector.sliderObject;
+                //Release it!!!
+                grabHand.ForceRelease(axisConnector.grabObject);
+                //Reparent it to the axes collection
+                slider.transform.SetParent(axisParent);
+
+                //Slowly have the object float to the right position
+                slider.transform.AnimateLocalPosition(originalPosition);
+                slider.transform.AnimateLocalRotation(originalRotation);
                 slider.GetComponent<Axis>().orientation = 2;
                 Axes.UpdateZAxis(slider.GetComponent<Axis>());
 
+                //Hide the old label and show the axis
+                originalGrabbableAttribute.gameObject.SetActive(false);
+                axisConnector.sliderObject.SetActive(true);
             }
-            
+            /*
             //Disable the collider once it snaps on 
             if (this.GetComponent<BoxCollider>())
             {
@@ -74,29 +105,36 @@ public class AxisSnapper : MonoBehaviour
             {
                 this.GetComponent<SphereCollider>().enabled = false;
             }
+            */
+
 
         }
 
 
     }
     void OnTriggerExit(Collider collider) {
+
+        //controlGrabbable will be the collider that exits
+        //print(collider.name);
+
         //axisParent the slider to the world space again
-        AxisConnector slider = collider.gameObject.GetComponent<AxisConnector>();
+        AxisConnector axisConnector = collider.gameObject.GetComponent<AxisConnector>();
+        Axis axis = collider.gameObject.GetComponent<Axis>();
 
-        if (slider)
+        if (axisConnector && axis)
         {
-
+            print("axis exists");
             if (axisOrdering == 0)
             {
-                Axes.RemoveXAxis(slider.GetComponent<Axis>());
+                Axes.RemoveXAxis(axisConnector.GetComponent<Axis>());
             }
             else if (axisOrdering == 1)
             {
-                Axes.RemoveYAxis(slider.GetComponent<Axis>());
+                Axes.RemoveYAxis(axisConnector.GetComponent<Axis>());
             }
             else if (axisOrdering == 2)
             {
-                Axes.RemoveZAxis(slider.GetComponent<Axis>());
+                Axes.RemoveZAxis(axisConnector.GetComponent<Axis>());
             }
 
             //grabHand.ForceRelease(slider.grabObject);

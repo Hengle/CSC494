@@ -93,7 +93,6 @@ public class SavedSpaceManager : MonoBehaviour
     //Update which items are active and inactive and then fix their locations in space
     public void UpdateSpaceContents()
     {
-        print("Updating contents");
         int activeSpaceCounter = 0;
         foreach (DesignSpace DS in SavedSpaces)
         {

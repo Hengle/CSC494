@@ -5,7 +5,8 @@ using UnityEngine;
 public class DesignSpaceCreator : MonoBehaviour
 {
     public OVRInput.Controller controller;
-    public GameObject panel;
+    public DesignSpace DSTemplate;
+    SavedSpaceManager savedSpaceManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,10 +16,11 @@ public class DesignSpaceCreator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Create a completely empty attribute space on the saved spaces list
         if (OVRInput.GetDown(OVRInput.Button.Four, controller)) {
             DesignSpace mainDesignSpace = DesignSpaceManager.instance.GetMainDesignSpace();
-            Vector3 newLocation = panel.transform.position + new Vector3(0f, 0.05f, 0f);
-            DesignSpace clonedDesignSpaceAxes = Instantiate(mainDesignSpace, newLocation, mainDesignSpace.transform.rotation, mainDesignSpace.transform.parent) as DesignSpace;
+            Vector3 newLocation = savedSpaceManager.transform.position + new Vector3(0f, 0.05f, 0f);
+            DesignSpace clonedDesignSpaceAxes = Instantiate(DSTemplate, new Vector3(0f, 0f, 0f), Quaternion.identity, mainDesignSpace.transform.parent); as DesignSpace;
         }
     }
 }
