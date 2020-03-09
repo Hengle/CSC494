@@ -66,7 +66,7 @@ public class SavedSpaceManager : MonoBehaviour
         }
 
     }
-    public void SaveSpace(DesignSpace designSpace) {
+    public void SaveSpace(DesignSpace designSpace, bool alwaysActive=false) {
 
         DesignSpace clone = (DesignSpace)Instantiate(designSpace, transform.parent.localPosition + new Vector3(0f, 0f, -0.1f), transform.parent.localRotation, SavedSpacesCollection.transform);
         clone.isSaveClone = true;
@@ -75,7 +75,7 @@ public class SavedSpaceManager : MonoBehaviour
         //clone.LockSpace();
 
         //Hide the object if it doesn't pass the filter
-        if (filterManager.MatchesCriteria(clone) == false) {
+        if (filterManager.MatchesCriteria(clone) == false & !alwaysActive) {
             clone.gameObject.SetActive(false);
         }
         SavedSpaces.Add(clone);

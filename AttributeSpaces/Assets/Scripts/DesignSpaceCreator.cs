@@ -10,7 +10,7 @@ public class DesignSpaceCreator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        savedSpaceManager = SavedSpaceManager.instance;
     }
 
     // Update is called once per frame
@@ -18,9 +18,9 @@ public class DesignSpaceCreator : MonoBehaviour
     {
         //Create a completely empty attribute space on the saved spaces list
         if (OVRInput.GetDown(OVRInput.Button.Four, controller)) {
-            DesignSpace mainDesignSpace = DesignSpaceManager.instance.GetMainDesignSpace();
-            Vector3 newLocation = savedSpaceManager.transform.position + new Vector3(0f, 0.05f, 0f);
-            DesignSpace clonedDesignSpaceAxes = Instantiate(DSTemplate, new Vector3(0f, 0f, 0f), Quaternion.identity, mainDesignSpace.transform.parent); as DesignSpace;
+            DesignSpace clonedDesignSpaceAxes = Instantiate(DSTemplate, new Vector3(0f, 0f, 0f), Quaternion.identity, savedSpaceManager.SavedSpacesCollection.transform);
+            savedSpaceManager.SavedSpaces.Add(clonedDesignSpaceAxes);
+            savedSpaceManager.UpdateSpaceContents();
         }
     }
 }
