@@ -19,6 +19,8 @@ public class DesignSpaceCreator : MonoBehaviour
         //Create a completely empty attribute space on the saved spaces list
         if (OVRInput.GetDown(OVRInput.Button.Four, controller)) {
             DesignSpace clonedDesignSpaceAxes = Instantiate(DSTemplate, new Vector3(0f, 0f, 0f), Quaternion.identity, savedSpaceManager.SavedSpacesCollection.transform);
+            clonedDesignSpaceAxes.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            clonedDesignSpaceAxes.gameObject.SetActive(true);
             savedSpaceManager.SavedSpaces.Add(clonedDesignSpaceAxes);
             savedSpaceManager.UpdateSpaceContents();
         }
