@@ -64,6 +64,13 @@ public class AttributeSelector : MonoBehaviour
                 GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.attribute.attributeType = AttributeType.BlueShift;
                 GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.label.text = attr_string;
             }
+            else if (attr_string == "# Leaves")
+            {
+                //TODOOOOOO make a num leaves attribute
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().attributeLabel.attributeType = AttributeType.NumLeaves;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.attribute.attributeType = AttributeType.NumLeaves;
+                GrabbableAttribute.GetComponent<GrabbableAttribute>().axis.label.text = attr_string;
+            }
 
 
             //Duplicate another of the grabbable objects under the same parent so that you never run out of them

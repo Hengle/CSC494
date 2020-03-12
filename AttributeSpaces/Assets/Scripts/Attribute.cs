@@ -3,34 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 
-
-/*
-public interface IAttribute
-{
-    //The default min and max are the limits intrinsic to the attribute
-    //For example, it's 0 to 1 for RGB values
-    float defaultMin { get; set; }
-    float defaultMax { get; set; }
-
-    //These are the movable bounds for the object
-    float min { get; set; }
-    float max { get; set; }
-
-    void SetAttributeToValue(float attrValue);
-}
-
-    //Implementing
-    //float IAttribute.defaultMin
-    //{
-    //    get { return 0f; }
-    //    set { defaultMin = value; }
-    //}
- */
-
 public enum AttributeType
 {
     //All of the possible attributes that we want
-    RedRGB, GreenRGB, BlueRGB, ScaleShiftX, ScaleShiftY, ScaleShiftZ, RedShift, GreenShift, BlueShift, Duplicates
+    RedRGB, GreenRGB, BlueRGB, ScaleShiftX, ScaleShiftY, ScaleShiftZ, RedShift, GreenShift, BlueShift, NumLeaves, Duplicates
 
     /*Each SceneObject has a list of Attributes
      * Each Attribute is a monobehaviour with an enum that tells you which specific one it is
@@ -124,6 +100,15 @@ public class Attribute : MonoBehaviour
                 max = 1.0f;
                 proxy.original.GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", newValue);
                 proxy.GetComponent<MeshRenderer>().material.SetFloat("_DeltaBlue", newValue);
+                break;
+            case AttributeType.NumLeaves:
+                //Adds a bunch of duplicates to the scene at a regular distance
+                GetComponent<TextMesh>().text = "# Leaves";
+                defaultMin = 0f;
+                defaultMax = 1.0f;
+                min = 0f;
+                max = 1.0f;
+                //TODO write a script that gets called to increase the # of leaves on a plant. Maybe just fake it by unhiding the leaves in a list in order?
                 break;
             case AttributeType.Duplicates:
                 //Adds a bunch of duplicates to the scene at a regular distance

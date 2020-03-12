@@ -106,11 +106,10 @@ public class Proxy : MonoBehaviour
                 //OR store the delta of the bounding box transform and change the original object by the same amount
                 //Vector3 newPos = transform.localPosition - past_position;
 
-                //TODO you need to update the original object based on where the proxy is!!!
-                //original.transform.localScale += newPos;
-                if (parentSpace.x_attr) { parentSpace.x_attr.attribute.applyAttributeChange(this, parentSpace.x_attr, 0, parentSpace.x_attr.currentValue); }
-                if (parentSpace.y_attr) { parentSpace.y_attr.attribute.applyAttributeChange(this, parentSpace.y_attr, 1, parentSpace.y_attr.currentValue); }
-                if (parentSpace.z_attr) { parentSpace.z_attr.attribute.applyAttributeChange(this, parentSpace.z_attr, 2, parentSpace.z_attr.currentValue); }
+                //TODO you need to subtract the originally plotted point of the object from this list here!!
+                if (parentSpace.x_attr) { parentSpace.x_attr.attribute.applyAttributeChange(this, parentSpace.x_attr, 0, parentSpace.x_attr.currentValue - parentSpace.x_attr.attribute.getCurrentValue(this.original_backup)); }
+                if (parentSpace.y_attr) { parentSpace.y_attr.attribute.applyAttributeChange(this, parentSpace.y_attr, 1, parentSpace.y_attr.currentValue - parentSpace.y_attr.attribute.getCurrentValue(this.original_backup)); }
+                if (parentSpace.z_attr) { parentSpace.z_attr.attribute.applyAttributeChange(this, parentSpace.z_attr, 2, parentSpace.z_attr.currentValue - parentSpace.z_attr.attribute.getCurrentValue(this.original_backup)); }
 
                 //Now update the mesh of the proxy to look like the updated object that it represents
                 if (GetComponent<MeshRenderer>() && original.GetComponent<MeshRenderer>())
