@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class DesignSpaceManager : MonoBehaviour
 {
     public OVRInput.Controller controller;
+    
     public static DesignSpaceManager instance { get => _instance ?? FindObjectOfType<DesignSpaceManager>(); }
     static DesignSpaceManager _instance;
 

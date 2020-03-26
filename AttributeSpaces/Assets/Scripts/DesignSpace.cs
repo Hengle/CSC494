@@ -38,6 +38,9 @@ public class DesignSpace : MonoBehaviour
 
     public bool isSaveClone;
 
+    //Index of the space that it was modelled off of originally
+    public int originalSpaceIndex;
+
     public AxisManager axisManager;
 
     public DesignSpaceManager designSpaceManager;
@@ -132,6 +135,7 @@ public class DesignSpace : MonoBehaviour
         };
 
         isSaveClone = false;
+
     }
 
     // Update is called once per frame BUT ONLY IF IT'S A MONOBEHAVIOUR!!

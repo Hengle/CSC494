@@ -57,18 +57,18 @@ public class SavedSpaceManager : MonoBehaviour
     }
     void OnTriggerExit(Collider collider)
     {
-        
         DesignSpace designSpace = collider.gameObject.GetComponent<DesignSpace>();
 
         if (designSpace)
         {
             hovering.Remove(designSpace);
         }
-
     }
+
     public void SaveSpace(DesignSpace designSpace, bool alwaysActive=false) {
 
         DesignSpace clone = (DesignSpace)Instantiate(designSpace, transform.parent.localPosition + new Vector3(0f, 0f, -0.1f), transform.parent.localRotation, SavedSpacesCollection.transform);
+        clone.originalSpaceIndex = designSpace.originalSpaceIndex;
         clone.isSaveClone = true;
         clone.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
@@ -79,7 +79,7 @@ public class SavedSpaceManager : MonoBehaviour
             clone.gameObject.SetActive(false);
         }
         SavedSpaces.Add(clone);
-
+        SavedSpaceLocations.Add(clone.transform.localPosition);
         //update the position of everything on the table right now and shift it to the left. The most recent things is in the centre by default
         UpdateSpaceContents();
     }
@@ -112,9 +112,20 @@ public class SavedSpaceManager : MonoBehaviour
         {
             if (SavedSpaces[i].gameObject.activeSelf)
             {
-                SavedSpaces[i].transform.AnimateLocalPosition(new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f));
+                Vector3 newLocation;
+                if (SavedSpaces[i].transform.localPosition.y < 0.0f)
+                {
+                    newLocation = new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f);
+                }
+                else {
+                    newLocation = new Vector3(0.25f * (float)(activeSpaceCounter), SavedSpaces[i].transform.localPosition.y, 0.0f);
+                }
+                
+                SavedSpaces[i].transform.AnimateLocalPosition(newLocation);
                 activeSpaceCounter -= 1;
             }
+
+            SavedSpaceLocations[i] = SavedSpaces[i].transform.localPosition;
         }
     }
 }
