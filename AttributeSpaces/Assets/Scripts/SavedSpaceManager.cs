@@ -113,12 +113,12 @@ public class SavedSpaceManager : MonoBehaviour
             if (SavedSpaces[i].gameObject.activeSelf)
             {
                 Vector3 newLocation;
-                if (SavedSpaces[i].transform.localPosition.y < 0.0f)
+                if (OVRInput.Get(OVRInput.Button.Three, controller))
                 {
-                    newLocation = new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f);
+                    newLocation = new Vector3(0.25f * (float)(activeSpaceCounter), SavedSpaces[i].transform.localPosition.y, 0.0f);
                 }
                 else {
-                    newLocation = new Vector3(0.25f * (float)(activeSpaceCounter), SavedSpaces[i].transform.localPosition.y, 0.0f);
+                    newLocation = new Vector3(0.25f * (float)(activeSpaceCounter), 0.0f, 0.0f);
                 }
                 
                 SavedSpaces[i].transform.AnimateLocalPosition(newLocation);

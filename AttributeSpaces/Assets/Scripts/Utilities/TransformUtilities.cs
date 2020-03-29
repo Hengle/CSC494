@@ -184,7 +184,7 @@ namespace Utilities
 
                 tf.localPosition = math.lerp(tf.localPosition, target, 0.1f);
 
-                if (math.lengthsq((float3)tf.localPosition - target) < 1e-50)
+                if (math.lengthsq((float3)tf.localPosition - target) < 1e-6)
                 {
                     tf.localPosition = target;
                     completed.Add(tf);

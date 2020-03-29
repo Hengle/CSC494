@@ -7,7 +7,6 @@ using Unity.Mathematics;
 public class ProgressionViewControl : MonoBehaviour
 {
 
-    public GameObject ProgressionPanel;
     public GameObject SpacePanel;
     //public GameObject FilterParent;
     public OVRInput.Controller controller;
@@ -50,7 +49,8 @@ public class ProgressionViewControl : MonoBehaviour
             for (int i = 0; i < savedSpaceManager.SavedSpaces.Count; i++)
             {
                 Vector3 newLocation = new Vector3(savedSpaceManager.SavedSpaces[i].transform.localPosition.x, (float)savedSpaceManager.SavedSpaces[i].originalSpaceIndex * 0.1f, savedSpaceManager.SavedSpaces[i].transform.localPosition.z);
-                StartCoroutine(AnimateSavedSpace(savedSpaceManager.SavedSpaces[i].transform, newLocation));
+                //StartCoroutine(AnimateSavedSpace(savedSpaceManager.SavedSpaces[i].transform, newLocation));
+                savedSpaceManager.SavedSpaces[i].transform.localPosition = newLocation;
             }
 
 
@@ -65,7 +65,8 @@ public class ProgressionViewControl : MonoBehaviour
             {   //Take the y position of the first object because it's bound to be the right y
                 Vector3 newLocation = new Vector3(savedSpaceManager.SavedSpaces[i].transform.localPosition.x, savedSpaceManager.SavedSpaces[0].transform.localPosition.y, savedSpaceManager.SavedSpaces[i].transform.localPosition.z);
                 //Vector3 newLocation = savedSpaceManager.SavedSpaces[i].transform.localPosition - new Vector3(0f, (float)savedSpaceManager.SavedSpaces[i].originalSpaceIndex * 0.3f, 0f);
-                StartCoroutine(AnimateSavedSpace(savedSpaceManager.SavedSpaces[i].transform, newLocation));
+                //StartCoroutine(AnimateSavedSpace(savedSpaceManager.SavedSpaces[i].transform, newLocation));
+                savedSpaceManager.SavedSpaces[i].transform.localPosition = newLocation;
             }
 
         }
