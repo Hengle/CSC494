@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:abf8054e7497319e1f1a98fb64e995b314be091cd91a89ccc14585cdeab4a3b4
-size 459
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.Mathematics;
+
+public class RecordingCamera : MonoBehaviour
+{
+    Transform main;
+
+    void Start()
+    {
+        main = Camera.main.transform;
+    }
+
+    void Update()
+    {
+        transform.position = math.lerp(transform.position, main.position, 0.1f);
+        transform.rotation = math.slerp(transform.rotation, main.rotation, 0.1f);
+    }
+}

@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:dd6751eb89019f9dbea5519b8a38ef203b30351ed7b916a2f72743e90b5854f6
-size 953
+
+ namespace UnityEditor.Recorder.Examples
+ {
+     /// <summary>
+     /// This example shows how to add "Start Recording" and "Stop Recording" menu items that can then be used to start/stop the
+     /// Recorders defined in the Recorder window.
+     ///
+     /// </summary>
+     /// <exclude/>
+     public static class RecorderEditorExample
+     {
+         [MenuItem(RecorderWindow.MenuRoot + "Examples/Start Recording", false, RecorderWindow.MenuRootIndex + 100)]
+         static void StartRecording()
+         {
+             var recorderWindow = EditorWindow.GetWindow<RecorderWindow>();
+             recorderWindow.StartRecording();
+         }
+
+         [MenuItem(RecorderWindow.MenuRoot + "Examples/Stop Recording", false, RecorderWindow.MenuRootIndex + 100)]
+         static void StopRecording()
+         {
+             var recorderWindow = EditorWindow.GetWindow<RecorderWindow>();
+             recorderWindow.StopRecording();
+         }
+     }
+ }

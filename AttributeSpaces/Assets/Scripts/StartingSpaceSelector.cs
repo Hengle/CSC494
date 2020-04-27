@@ -1,3 +1,48 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:28db8d5954e097952b02ab0b6e7ed83ee9dbb20dbdd4840d76edfe3908c31414
-size 1113
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class StartingSpaceSelector : MonoBehaviour
+{
+
+    public static StartingSpaceSelector instance { get => _instance ?? FindObjectOfType<StartingSpaceSelector>(); }
+    static StartingSpaceSelector _instance;
+
+    public DesignSpace startingSpace;
+
+    public List<DesignSpace> hovering;
+    // Start is called before the first frame update
+    void Start()
+    {
+        startingSpace = null;
+        hovering = new List<DesignSpace>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        DesignSpace designSpace = collider.gameObject.GetComponent<DesignSpace>();
+
+        if (designSpace)
+        {
+            hovering.Add(designSpace);
+        }
+    }
+    void OnTriggerExit(Collider collider)
+    {
+        DesignSpace designSpace = collider.gameObject.GetComponent<DesignSpace>();
+
+        if (designSpace)
+        {
+            hovering.Remove(designSpace);
+        }
+
+    }
+
+
+}
