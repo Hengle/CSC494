@@ -1,20 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class AxisConnector : MonoBehaviour
-{
-    public GameObject sliderObject;
-    public OVRGrabbable grabObject;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:9e8a6fb89aeaa1e7f6f3c58318c9cb91c2a0523c6c321167b8729699c30b543e
+size 372

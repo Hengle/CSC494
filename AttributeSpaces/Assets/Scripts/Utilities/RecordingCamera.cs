@@ -1,20 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Mathematics;
-
-public class RecordingCamera : MonoBehaviour
-{
-    Transform main;
-
-    void Start()
-    {
-        main = Camera.main.transform;
-    }
-
-    void Update()
-    {
-        transform.position = math.lerp(transform.position, main.position, 0.1f);
-        transform.rotation = math.slerp(transform.rotation, main.rotation, 0.1f);
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:6366c3559ac009bd9570dc89b899cb564ea694c0c1934d74dc272030133bad86
+size 439
